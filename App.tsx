@@ -1,20 +1,40 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { FC } from "react";
+
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import ManageExpendable from "./screens/ManageExpendable";
+import AllExpendables from "./screens/AllExpendables";
+import ExpendableDetail from "./screens/ExpendableDetail";
+
+const Stack = createNativeStackNavigator();
+const BottomTabs = createBottomTabNavigator();
+
+const ExpendableOverview: FC = () => {
+  return (
+    <BottomTabs.Navigator>
+      <BottomTabs.Screen name="AllExpendables" component={AllExpendables} />
+      <BottomTabs.Screen name="ExpendableDetail" component={ExpendableDetail} />
+    </BottomTabs.Navigator>
+  );
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>One day without</Text>
+    <>
       <StatusBar style="auto" />
-    </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="ExpendablesOverview"
+            component={ExpendableOverview}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="ManageExpendable" component={ManageExpendable} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
