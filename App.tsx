@@ -9,32 +9,79 @@ import ManageExpendable from "./screens/ManageExpendable";
 import AllExpendables from "./screens/AllExpendables";
 import ExpendableDetail from "./screens/ExpendableDetail";
 
+import { Ionicons } from "@expo/vector-icons";
+
+import { GLOBAL_STYLES } from "./constants/styles";
+import Config from "./screens/Config";
+import ExpendablesContextProvider from "./store/expendables-context";
+
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
-const ExpendableOverview: FC = () => {
+const ExpendablesOverview: FC = () => {
   return (
-    <BottomTabs.Navigator>
-      <BottomTabs.Screen name="AllExpendables" component={AllExpendables} />
-      <BottomTabs.Screen name="ExpendableDetail" component={ExpendableDetail} />
-    </BottomTabs.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Expendables"
+        component={AllExpendables}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="ManageExpendable" component={ExpendableDetail} />
+    </Stack.Navigator>
   );
 };
 
 export default function App() {
   return (
     <>
-      <StatusBar style="auto" />
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="ExpendablesOverview"
-            component={ExpendableOverview}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="ManageExpendable" component={ManageExpendable} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <StatusBar style="light" />
+      <ExpendablesContextProvider>
+        <NavigationContainer>
+          <BottomTabs.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
+              headerTintColor: GLOBAL_STYLES.colors.white,
+              tabBarStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
+              tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
+            }}
+            initialRouteName="ExpendablesOverview"
+          >
+            <BottomTabs.Screen
+              name="Config"
+              component={Config}
+              options={{
+                title: "Configuración",
+                tabBarLabel: "",
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name={"settings"} size={size} color={color} />
+                ),
+              }}
+            />
+            <BottomTabs.Screen
+              name="ExpendablesOverview"
+              component={ExpendablesOverview}
+              options={{
+                title: "Un día sin",
+                tabBarLabel: "",
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons name={"skull"} size={size} color={color} />
+                ),
+              }}
+            />
+            <BottomTabs.Screen
+              name="ManageExpendable"
+              component={ManageExpendable}
+              options={{
+                title: "Manejar venenos",
+                tabBarLabel: "",
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons size={size} color={color} name={"add-circle"} />
+                ),
+              }}
+            />
+          </BottomTabs.Navigator>
+        </NavigationContainer>
+      </ExpendablesContextProvider>
     </>
   );
 }
