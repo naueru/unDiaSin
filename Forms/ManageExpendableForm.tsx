@@ -158,7 +158,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
           error={inputs.name.hasError ? "30 caracteres máximo" : ""}
           onChange={handleInputChange}
         />
-        <FieldsRow>
+        <FieldsRow label="Fecha de inicio">
           <InputField
             name="initDay"
             label="Día"
@@ -190,7 +190,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
             centered
           />
         </FieldsRow>
-        <FieldsRow>
+        <FieldsRow label="Costo económico">
           <InputField
             name="cost"
             label="Costo $"
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    gap: 16,
+    gap: 20,
     paddingHorizontal: 32,
     paddingVertical: 100,
     width: "100%",
