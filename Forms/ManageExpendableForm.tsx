@@ -1,12 +1,19 @@
+// Core
 import { FC, useState } from "react";
 import { Button, ScrollView, StyleSheet, View } from "react-native";
+
+// Components
 import InputField from "./components/InputField";
-import { GLOBAL_STYLES } from "../constants/styles";
 import FieldsRow from "./components/FieldsRow";
 import IconPicker from "../components/IconPicker";
-import { ICONS_SORTED } from "../constants/IconsSorted";
-import { TIcons } from "../models/Icons";
 import Title from "../components/Title";
+
+// Types
+import { TIcons } from "../models/Icons";
+
+// Constants
+import { ICONS_SORTED } from "../constants/IconsSorted";
+import { GLOBAL_STYLES } from "../constants/styles";
 
 type TInputFieldProps = {
   error?: string;
