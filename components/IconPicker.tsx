@@ -1,11 +1,17 @@
+// Core
+import { Ionicons } from "@expo/vector-icons";
 import { FC, useState } from "react";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
 
-import { Ionicons } from "@expo/vector-icons";
+//Components
+import PressableIcon from "./PressableIcon";
+
+// Types
+import { TIcons } from "../models/Icons";
+
+//Constants
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
-import { TIcons } from "../models/Icons";
-import PressableIcon from "./PressableIcon";
 import { DEFAULT_ICON } from "../constants/defaults";
 
 type TIconPickerProps = {
