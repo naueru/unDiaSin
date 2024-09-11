@@ -1,19 +1,25 @@
+// Core
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Ionicons } from "@expo/vector-icons";
 
 import { FC } from "react";
 
 import { StatusBar } from "expo-status-bar";
+
+// Context
+import ExpendablesContextProvider from "./store/expendables-context";
+
+// Screens
 import ManageExpendable from "./screens/ManageExpendable";
 import AllExpendables from "./screens/AllExpendables";
 import ExpendableDetail from "./screens/ExpendableDetail";
-
-import { Ionicons } from "@expo/vector-icons";
-
-import { GLOBAL_STYLES } from "./constants/styles";
 import Config from "./screens/Config";
-import ExpendablesContextProvider from "./store/expendables-context";
+
+// Constants
+import { GLOBAL_STYLES } from "./constants/styles";
+import { ROUTES } from "./constants/constants";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -22,11 +28,14 @@ const ExpendablesOverview: FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Expendables"
+        name={ROUTES.expendables}
         component={AllExpendables}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ManageExpendable" component={ExpendableDetail} />
+      <Stack.Screen
+        name={ROUTES.expendableDetail}
+        component={ExpendableDetail}
+      />
     </Stack.Navigator>
   );
 };
@@ -44,10 +53,10 @@ export default function App() {
               tabBarStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
               tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
             }}
-            initialRouteName="ExpendablesOverview"
+            initialRouteName={ROUTES.expendablesOverview}
           >
             <BottomTabs.Screen
-              name="Config"
+              name={ROUTES.config}
               component={Config}
               options={{
                 title: "Configuración",
@@ -58,7 +67,7 @@ export default function App() {
               }}
             />
             <BottomTabs.Screen
-              name="ExpendablesOverview"
+              name={ROUTES.expendablesOverview}
               component={ExpendablesOverview}
               options={{
                 title: "Un día sin",
@@ -69,7 +78,7 @@ export default function App() {
               }}
             />
             <BottomTabs.Screen
-              name="ManageExpendable"
+              name={ROUTES.manageExpendable}
               component={ManageExpendable}
               options={{
                 title: "Manejar venenos",
