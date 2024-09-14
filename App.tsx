@@ -30,11 +30,20 @@ const ExpendablesOverview: FC = () => {
       <Stack.Screen
         name={ROUTES.expendables}
         component={AllExpendables}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+        }}
       />
       <Stack.Screen
         name={ROUTES.expendableDetail}
         component={ExpendableDetail}
+        options={{
+          headerShown: false,
+          presentation: "modal",
+          animation: "slide_from_bottom",
+        }}
       />
     </Stack.Navigator>
   );
