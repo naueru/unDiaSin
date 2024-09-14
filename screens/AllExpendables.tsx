@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FC, useContext } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { ExpendablesContext } from "../store/expendables-context";
+import { ROUTES } from "../constants/constants";
 
 const AllExpendables: FC = () => {
   const ExpendablesCtx = useContext(ExpendablesContext);
@@ -11,7 +12,7 @@ const AllExpendables: FC = () => {
     <View style={styles.container}>
       <Button
         onPress={() => {
-          navigation.navigate("ManageExpendable");
+          navigation.navigate(ROUTES.expendableDetail);
         }}
         title="ASD"
       />
