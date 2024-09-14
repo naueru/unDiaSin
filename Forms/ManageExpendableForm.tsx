@@ -21,7 +21,7 @@ type TInputFieldProps = {
   placeholder?: string;
   value?: string;
   onSubmit: Function;
-  onCancel: () => any;
+  onCancel: Function;
 };
 
 interface IFormInput {
@@ -135,6 +135,15 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
     }
   };
 
+  const resetForm = () => {
+    setInputs(initialState);
+  };
+
+  const handleCancel = () => {
+    resetForm();
+    onCancel();
+  };
+
   const handleInputChange = (name: string, value: string) => {
     setInputs((current) => {
       return {
@@ -224,7 +233,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
             <Button
               title="Cancel"
               color={GLOBAL_STYLES.colors.primary200}
-              onPress={onCancel}
+              onPress={handleCancel}
             />
 
             <Button
