@@ -27,11 +27,15 @@ const ManageExpendable: FC = () => {
     navigation.navigate(ROUTES.expendables);
   };
 
+  const handleCancel = () => {
+    navigation.navigate(ROUTES.expendables);
+  };
+
   return (
     <View style={styles.container}>
       <ManageExpendableForm
         label="Nuevo Veneno"
-        onCancel={() => alert("Canceled")}
+        onCancel={handleCancel}
         onSubmit={handleSubmit}
       />
     </View>
