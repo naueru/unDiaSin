@@ -68,7 +68,7 @@ const initialState: IFormInputs = {
     hasError: false,
   },
   timesPerDay: {
-    value: "1",
+    value: "0",
     isDirty: false,
     hasError: false,
   },
@@ -98,10 +98,10 @@ const validators: IValidator = {
     return ICONS_SORTED.indexOf(value) !== -1;
   },
   cost: (value: string) => {
-    return +value > 0;
+    return +value >= 0;
   },
   timesPerDay: (value: string) => {
-    return +value > 0;
+    return +value >= 0;
   },
 };
 
