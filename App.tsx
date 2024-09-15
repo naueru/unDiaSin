@@ -40,7 +40,6 @@ const ExpendablesOverview: FC = () => {
         name={ROUTES.expendableDetail}
         component={ExpendableDetail}
         options={{
-          headerShown: false,
           presentation: "modal",
           animation: "slide_from_right",
         }}
@@ -61,6 +60,7 @@ export default function App() {
               headerTintColor: GLOBAL_STYLES.colors.white,
               tabBarStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
               tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
+              tabBarShowLabel: false,
             }}
             initialRouteName={ROUTES.expendablesOverview}
           >
@@ -79,7 +79,7 @@ export default function App() {
               name={ROUTES.expendablesOverview}
               component={ExpendablesOverview}
               options={{
-                title: "Un día sin",
+                title: "Un día sin...",
                 tabBarLabel: "",
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name={"skull"} size={size} color={color} />
