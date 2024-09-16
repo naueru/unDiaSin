@@ -20,6 +20,7 @@ import Config from "./screens/Config";
 // Constants
 import { GLOBAL_STYLES } from "./constants/styles";
 import { ROUTES } from "./constants/constants";
+import DummyDataButton from "./components/DummyDataButton";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -84,6 +85,7 @@ export default function App() {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name={"skull"} size={size} color={color} />
                 ),
+                headerRight: () => <DummyDataButton />,
               }}
             />
             <BottomTabs.Screen
