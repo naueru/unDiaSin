@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useState } from "react";
 import { TExpendable, TExpendables } from "../models/Expendables";
 
-interface IExpendablesContext {
+export interface IExpendablesContext {
   expendables: TExpendables;
   addExpendable: Function;
   updateExpendable: Function;
