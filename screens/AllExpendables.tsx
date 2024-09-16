@@ -5,7 +5,10 @@ import { FC, useContext } from "react";
 import { Button, FlatList, StyleSheet, View } from "react-native";
 
 // Context
-import { ExpendablesContext } from "../store/expendables-context";
+import {
+  ExpendablesContext,
+  IExpendablesContext,
+} from "../store/expendables-context";
 
 // Components
 import Title from "../components/Title";
@@ -16,7 +19,7 @@ import { ROUTES } from "../constants/constants";
 import { GLOBAL_STYLES } from "../constants/styles";
 
 const AllExpendables: FC = () => {
-  const ExpendablesCtx = useContext(ExpendablesContext);
+  const ExpendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const hasExpendables = ExpendablesCtx.expendables.length > 0;
