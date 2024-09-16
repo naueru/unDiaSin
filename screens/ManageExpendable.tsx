@@ -5,7 +5,10 @@ import { FC, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 
 // Context
-import { ExpendablesContext } from "../store/expendables-context";
+import {
+  ExpendablesContext,
+  IExpendablesContext,
+} from "../store/expendables-context";
 
 // Components
 import ManageExpendableForm from "../Forms/ManageExpendableForm";
@@ -20,7 +23,7 @@ import { ROUTES } from "../constants/constants";
 const ManageExpendable: FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const expendablesCtx = useContext(ExpendablesContext);
+  const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
 
   const handleSubmit = (values: TExpendable) => {
     expendablesCtx.addExpendable(values);
