@@ -18,16 +18,16 @@ import { GLOBAL_STYLES } from "../constants/styles";
 type TInputFieldProps = {
   error?: string;
   label?: string;
+  onCancel: Function;
+  onSubmit: Function;
   placeholder?: string;
   value?: string;
-  onSubmit: Function;
-  onCancel: Function;
 };
 
 interface IFormInput {
-  value: string;
-  isDirty: boolean;
   hasError: boolean;
+  isDirty: boolean;
+  value: string;
 }
 
 interface IFormInputs {
@@ -38,39 +38,39 @@ const today = new Date();
 
 const initialState: IFormInputs = {
   name: {
-    value: "",
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: "",
   },
   initDay: {
-    value: today.getDate().toString().padStart(2, "0"),
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: today.getDate().toString().padStart(2, "0"),
   },
   initMonth: {
-    value: (today.getMonth() + 1).toString().padStart(2, "0"),
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: (today.getMonth() + 1).toString().padStart(2, "0"),
   },
   initYear: {
-    value: today.getFullYear().toString(),
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: today.getFullYear().toString(),
   },
   icon: {
-    value: "skull",
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: "skull",
   },
   cost: {
-    value: "0",
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: "0",
   },
   timesPerDay: {
-    value: "0",
-    isDirty: false,
     hasError: false,
+    isDirty: false,
+    value: "0",
   },
 };
 
@@ -132,6 +132,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
         payload[input] = inputs[input].value;
       }
       onSubmit(payload);
+      resetForm();
     }
   };
 
