@@ -40,6 +40,7 @@ const ExpendablesOverview: FC = () => {
           title: "Un día sin...",
           presentation: "modal",
           animation: "slide_from_bottom",
+          headerRight: () => <DummyDataButton />,
         }}
       />
       <Stack.Screen
@@ -91,7 +92,6 @@ export default function App() {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name={"skull"} size={size} color={color} />
                 ),
-                headerRight: () => <DummyDataButton />,
                 headerShown: false,
               }}
             />
