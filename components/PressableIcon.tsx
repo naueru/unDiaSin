@@ -9,9 +9,15 @@ type TIconPickerProps = {
   name: TIcons;
   onPress: Function;
   selected: boolean;
+  size?: number;
 };
 
-const IconPicker: FC<TIconPickerProps> = ({ name, onPress, selected }) => {
+const IconPicker: FC<TIconPickerProps> = ({
+  name,
+  onPress,
+  selected,
+  size = 30,
+}) => {
   const handleSelect = () => {
     onPress(name);
   };
@@ -20,7 +26,7 @@ const IconPicker: FC<TIconPickerProps> = ({ name, onPress, selected }) => {
       <View style={styles.iconContainer}>
         <Ionicons
           name={name}
-          size={30}
+          size={size}
           color={
             selected
               ? GLOBAL_STYLES.colors.white
