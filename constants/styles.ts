@@ -13,5 +13,11 @@ export const GLOBAL_STYLES = {
   colors: {
     ...COLOR_ALTERNATIVES.a,
   },
-  shadow: {},
+  shadow: {
+    elevation: 8,
+    shadowColor: "black",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+  },
 };
