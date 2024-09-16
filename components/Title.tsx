@@ -1,5 +1,8 @@
+// Core
 import { FC } from "react";
 import { StyleSheet, Text, View } from "react-native";
+
+// Constants
 import { GLOBAL_STYLES } from "../constants/styles";
 
 type TTitle = {
@@ -18,7 +21,6 @@ export default Title;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },

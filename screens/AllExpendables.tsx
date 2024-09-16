@@ -1,45 +1,65 @@
+// Core
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FC, useContext } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, StyleSheet, View } from "react-native";
+
+// Context
 import { ExpendablesContext } from "../store/expendables-context";
+
+// Components
+import Title from "../components/Title";
+import ExpendableCard from "../components/ExpendableCard";
+
+// Constants
 import { ROUTES } from "../constants/constants";
+import { GLOBAL_STYLES } from "../constants/styles";
 
 const AllExpendables: FC = () => {
   const ExpendablesCtx = useContext(ExpendablesContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  return (
-    <View style={styles.container}>
+
+  const hasExpendables = ExpendablesCtx.expendables.length > 0;
+
+  const content = hasExpendables ? (
+    <View>
+      <FlatList
+        contentContainerStyle={styles.contentContainer}
+        data={ExpendablesCtx.expendables}
+        renderItem={({ item }) => <ExpendableCard expendable={item} />}
+        keyExtractor={(item) => `expendable_${item.id}`}
+      />
+    </View>
+  ) : (
+    <View style={styles.emptyContentContainer}>
+      <Title label="Todavía no tienes nada agregado" />
       <Button
         onPress={() => {
-          navigation.navigate(ROUTES.expendableDetail);
+          navigation.navigate(ROUTES.manageExpendable);
         }}
-        title="ASD"
+        title="Nuevo veneno"
       />
-      <Text>All expendable poisons</Text>
-      {ExpendablesCtx.expendables.map((expendable) => (
-        <View key={`expendable_${expendable.id}`}>
-          <Text>{expendable.icon}</Text>
-          <Text>{expendable.id}</Text>
-          <Text>{expendable.name}</Text>
-          <Text>{expendable.initDay}</Text>
-          <Text>{expendable.initMonth}</Text>
-          <Text>{expendable.initYear}</Text>
-          <Text>{expendable.cost}</Text>
-          <Text>{expendable.timesPerDay}</Text>
-        </View>
-      ))}
     </View>
   );
+
+  return <View style={styles.outerContainer}>{content}</View>;
 };
 
 export default AllExpendables;
 
 const styles = StyleSheet.create({
-  container: {
+  outerContainer: {
+    backgroundColor: GLOBAL_STYLES.colors.primary500,
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+  },
+  contentContainer: {
+    gap: 32,
+    padding: 16,
+  },
+  emptyContentContainer: {
+    alignItems: "center",
+    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    gap: 32,
   },
 });
