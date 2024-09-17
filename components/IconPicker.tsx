@@ -31,6 +31,7 @@ const IconPicker: FC<TIconPickerProps> = ({
     onChange(name, value);
     setShowList(false);
   };
+
   return (
     <View style={styles.container}>
       <Pressable onPress={() => setShowList((current) => !current)}>
@@ -53,6 +54,7 @@ const IconPicker: FC<TIconPickerProps> = ({
               name={item}
               onPress={() => handleSelect(item)}
               selected={item === value}
+              label={name}
             />
           )}
           keyExtractor={(item) => "icon_" + item}
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     alignItems: "center",
-    width: 50,
     height: 50,
+    width: 50,
   },
 });
