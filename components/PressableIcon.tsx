@@ -8,14 +8,16 @@ import { TIcons } from "../models/Icons";
 type TIconPickerProps = {
   name: TIcons;
   onPress: Function;
-  selected: boolean;
+  selected?: boolean;
   size?: number;
+  label?: string;
 };
 
-const IconPicker: FC<TIconPickerProps> = ({
+const PressableIcon: FC<TIconPickerProps> = ({
   name,
   onPress,
   selected,
+  label,
   size = 30,
 }) => {
   const handleSelect = () => {
@@ -33,13 +35,13 @@ const IconPicker: FC<TIconPickerProps> = ({
               : GLOBAL_STYLES.colors.accent500
           }
         />
-        <Text style={styles.text}>{name}</Text>
+        {label ? <Text style={styles.text}>{label}</Text> : null}
       </View>
     </Pressable>
   );
 };
 
-export default memo(IconPicker);
+export default memo(PressableIcon);
 
 const styles = StyleSheet.create({
   iconContainer: {
