@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useState } from "react";
 import { TExpendable, TExpendables } from "../models/Expendables";
 
-interface IExpendablesContext {
+export interface IExpendablesContext {
   expendables: TExpendables;
   addExpendable: Function;
   updateExpendable: Function;
@@ -21,9 +21,14 @@ const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
   const addExpendable = (expendable: TExpendable) => {
     setExpendables((current) => [...current, expendable]);
   };
-  const updateExpendable = () => {
-    setExpendables([]);
+
+  const updateExpendable = (id: string, payload: TExpendable) => {
+    const newState = [...expendables];
+    newState[expendables.findIndex((expendable) => expendable.id === id)] =
+      payload;
+    setExpendables(() => newState);
   };
+
   const deleteExpendable = (id: string) => {
     setExpendables(() =>
       expendables.filter((expendable) => expendable.id !== id)

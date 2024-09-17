@@ -27,14 +27,20 @@ const BottomTabs = createBottomTabNavigator();
 
 const ExpendablesOverview: FC = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
+        headerTintColor: GLOBAL_STYLES.colors.white,
+      }}
+    >
       <Stack.Screen
         name={ROUTES.expendables}
         component={AllExpendables}
         options={{
-          headerShown: false,
+          title: "Un día sin...",
           presentation: "modal",
           animation: "slide_from_bottom",
+          headerRight: () => <DummyDataButton />,
         }}
       />
       <Stack.Screen
@@ -43,6 +49,7 @@ const ExpendablesOverview: FC = () => {
         options={{
           presentation: "modal",
           animation: "slide_from_right",
+          title: "Detail",
         }}
       />
     </Stack.Navigator>
@@ -85,7 +92,7 @@ export default function App() {
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name={"skull"} size={size} color={color} />
                 ),
-                headerRight: () => <DummyDataButton />,
+                headerShown: false,
               }}
             />
             <BottomTabs.Screen

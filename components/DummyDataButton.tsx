@@ -3,10 +3,14 @@ import { FC, useContext } from "react";
 import { Button } from "react-native";
 
 // Context
-import { ExpendablesContext } from "../store/expendables-context";
+import {
+  ExpendablesContext,
+  IExpendablesContext,
+} from "../store/expendables-context";
 
 const DummyDataButton: FC = () => {
-  const ctx = useContext(ExpendablesContext);
+  const ctx = useContext<IExpendablesContext>(ExpendablesContext);
+
   return (
     <Button
       onPress={() =>
