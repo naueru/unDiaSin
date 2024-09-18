@@ -1,9 +1,13 @@
+// Core
 import { Ionicons } from "@expo/vector-icons";
 import { FC, memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { GLOBAL_STYLES } from "../constants/styles";
+// Types
 import { TIcons } from "../models/Icons";
+
+// Constants
+import { GLOBAL_STYLES } from "../constants/styles";
 
 type TIconPickerProps = {
   name: TIcons;
@@ -46,6 +50,7 @@ export default memo(PressableIcon);
 const styles = StyleSheet.create({
   iconContainer: {
     alignItems: "center",
+    gap: 8,
     height: 50,
     width: 50,
   },
