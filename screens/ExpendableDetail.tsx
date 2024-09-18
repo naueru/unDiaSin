@@ -1,8 +1,13 @@
 // Core
 import { Ionicons } from "@expo/vector-icons";
 import { FC, useContext, useLayoutEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
+
+// Components
+import Title from "../components/Title";
+import Frame from "../components/Frame";
+import PressableIcon from "../components/PressableIcon";
 
 // Context
 import {
@@ -10,16 +15,15 @@ import {
   IExpendablesContext,
 } from "../store/expendables-context";
 
+// Utils
+import { getDaysDiff } from "../utils/date";
+
 // Types
 import { TExpendable } from "../models/Expendables";
 
 // Constants
 import { GLOBAL_STYLES } from "../constants/styles";
-import { getDaysDiff } from "../utils/date";
 import { DEFAULT_EXPENDABLE } from "../constants/defaults";
-import Title from "../components/Title";
-import Frame from "../components/Frame";
-import PressableIcon from "../components/PressableIcon";
 import { ROUTES } from "../constants/constants";
 
 const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
@@ -58,8 +62,22 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   });
 
   const handleDelete = () => {
-    expendablesCtx.deleteExpendable(route.params.id);
-    navigation.navigate(ROUTES.expendables);
+    Alert.alert(
+      "¿Estás seguro?",
+      "Esta acción es irreversible",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: () => {
+            expendablesCtx.deleteExpendable(route.params.id);
+            navigation.navigate(ROUTES.expendables);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const handleEdit = () => {
@@ -69,14 +87,27 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   };
 
   const handleRestart = () => {
-    const today = new Date();
+    Alert.alert(
+      "¿Estás seguro?",
+      "Esto pondrá hoy como día de inicio",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Reiniciar",
+          onPress: () => {
+            const today = new Date();
 
-    expendablesCtx.updateExpendable(route.params.id, {
-      ...expendable,
-      initDay: today.getDate().toString().padStart(2, "0"),
-      initMonth: (today.getMonth() + 1).toString().padStart(2, "0"),
-      initYear: today.getFullYear().toString(),
-    });
+            expendablesCtx.updateExpendable(route.params.id, {
+              ...expendable,
+              initDay: today.getDate().toString().padStart(2, "0"),
+              initMonth: (today.getMonth() + 1).toString().padStart(2, "0"),
+              initYear: today.getFullYear().toString(),
+            });
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   return (
@@ -108,7 +139,7 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
       <View style={styles.actions}>
         <PressableIcon
           name="reload"
-          label="Restart"
+          label="Reiniciar"
           size={40}
           onPress={handleRestart}
         />
