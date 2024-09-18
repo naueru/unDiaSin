@@ -1,8 +1,8 @@
 // Core
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ParamListBase, useNavigation } from "@react-navigation/native";
-import { FC, useContext } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { FC, useContext, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Context
 import {
@@ -11,7 +11,9 @@ import {
 } from "../store/expendables-context";
 
 // Components
-import ManageExpendableForm from "../Forms/ManageExpendableForm";
+import ManageExpendableForm, {
+  IFormInputs,
+} from "../Forms/ManageExpendableForm";
 
 // Types
 import { TExpendable } from "../models/Expendables";
@@ -20,13 +22,68 @@ import { TExpendable } from "../models/Expendables";
 import { GLOBAL_STYLES } from "../constants/styles";
 import { ROUTES } from "../constants/constants";
 
-const ManageExpendable: FC = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
+const ManageExpendable: FC<NativeStackNavigatorProps> = ({
+  route,
+  navigation,
+}) => {
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
+  const isFocused = useIsFocused();
+
+  const { expendables } = expendablesCtx;
+  const expendable = expendables.find(
+    (expendable: TExpendable) => expendable.id === route?.params?.id
+  );
+
+  const isEditing = !!route?.params?.id;
+
+  const today = new Date();
+
+  const defaultValues: IFormInputs = {
+    name: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.name || "",
+    },
+    initDay: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.initDay || today.getDate().toString().padStart(2, "0"),
+    },
+    initMonth: {
+      hasError: false,
+      isDirty: false,
+      value:
+        expendable?.initMonth ||
+        (today.getMonth() + 1).toString().padStart(2, "0"),
+    },
+    initYear: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.initYear || today.getFullYear().toString(),
+    },
+    icon: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.icon || "skull",
+    },
+    cost: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.cost || "0",
+    },
+    timesPerDay: {
+      hasError: false,
+      isDirty: false,
+      value: expendable?.timesPerDay || "0",
+    },
+  };
 
   const handleSubmit = (values: TExpendable) => {
-    expendablesCtx.addExpendable(values);
+    if (isEditing) {
+      expendablesCtx.updateExpendable(route?.params?.id, values);
+    } else {
+      expendablesCtx.addExpendable(values);
+    }
     navigation.navigate(ROUTES.expendables);
   };
 
@@ -34,13 +91,22 @@ const ManageExpendable: FC = () => {
     navigation.navigate(ROUTES.expendables);
   };
 
+  useEffect(() => {
+    if (!isFocused && isEditing) {
+      return navigation.setParams({ id: null });
+    }
+  }, [isFocused, isEditing]);
+
   return (
     <View style={styles.container}>
-      <ManageExpendableForm
-        label="Nuevo Veneno"
-        onCancel={handleCancel}
-        onSubmit={handleSubmit}
-      />
+      {isFocused ? (
+        <ManageExpendableForm
+          label="Nuevo Veneno"
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+          defaultValues={defaultValues}
+        />
+      ) : null}
     </View>
   );
 };

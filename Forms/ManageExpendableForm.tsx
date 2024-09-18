@@ -15,6 +15,16 @@ import { TIcons } from "../models/Icons";
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
 
+export interface IFormInput {
+  hasError: boolean;
+  isDirty: boolean;
+  value: string;
+}
+
+export interface IFormInputs {
+  [key: string]: IFormInput;
+}
+
 type TInputFieldProps = {
   error?: string;
   label?: string;
@@ -22,19 +32,10 @@ type TInputFieldProps = {
   onSubmit: Function;
   placeholder?: string;
   value?: string;
+  defaultValues?: IFormInputs;
 };
 
-interface IFormInput {
-  hasError: boolean;
-  isDirty: boolean;
-  value: string;
-}
-
-interface IFormInputs {
-  [key: string]: IFormInput;
-}
-
-const today = new Date();
+const today: Date = new Date();
 
 const initialState: IFormInputs = {
   name: {
@@ -109,8 +110,11 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
   label,
   onSubmit,
   onCancel,
+  defaultValues,
 }) => {
-  const [inputs, setInputs] = useState<IFormInputs>(initialState);
+  const [inputs, setInputs] = useState<IFormInputs>(
+    defaultValues || initialState
+  );
 
   const handleSubmit = () => {
     let hasErrors = false;
