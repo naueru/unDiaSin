@@ -2,11 +2,15 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 
 import { FC } from "react";
 
+// Components
 import { StatusBar } from "expo-status-bar";
+import DummyDataButton from "./components/DummyDataButton";
 
 // Context
 import ExpendablesContextProvider from "./store/expendables-context";
@@ -20,7 +24,6 @@ import Config from "./screens/Config";
 // Constants
 import { GLOBAL_STYLES } from "./constants/styles";
 import { ROUTES } from "./constants/constants";
-import DummyDataButton from "./components/DummyDataButton";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -62,51 +65,59 @@ export default function App() {
       <StatusBar style="light" />
       <ExpendablesContextProvider>
         <NavigationContainer>
-          <BottomTabs.Navigator
-            screenOptions={{
-              headerStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
-              headerTintColor: GLOBAL_STYLES.colors.white,
-              tabBarStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
-              tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
-              tabBarShowLabel: false,
-            }}
-            initialRouteName={ROUTES.expendablesOverview}
-          >
-            <BottomTabs.Screen
-              name={ROUTES.config}
-              component={Config}
-              options={{
-                title: "Configuración",
-                tabBarLabel: "",
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name={"settings"} size={size} color={color} />
-                ),
-              }}
-            />
-            <BottomTabs.Screen
-              name={ROUTES.expendablesOverview}
-              component={ExpendablesOverview}
-              options={{
-                title: "Un día sin...",
-                tabBarLabel: "",
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name={"skull"} size={size} color={color} />
-                ),
-                headerShown: false,
-              }}
-            />
-            <BottomTabs.Screen
-              name={ROUTES.manageExpendable}
-              component={ManageExpendable}
-              options={{
-                title: "Manejar venenos",
-                tabBarLabel: "",
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons size={size} color={color} name={"add-circle"} />
-                ),
-              }}
-            />
-          </BottomTabs.Navigator>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+              <BottomTabs.Navigator
+                screenOptions={{
+                  headerStyle: {
+                    backgroundColor: GLOBAL_STYLES.colors.primary500,
+                  },
+                  headerTintColor: GLOBAL_STYLES.colors.white,
+                  tabBarStyle: {
+                    backgroundColor: GLOBAL_STYLES.colors.primary500,
+                  },
+                  tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
+                  tabBarShowLabel: false,
+                }}
+                initialRouteName={ROUTES.expendablesOverview}
+              >
+                <BottomTabs.Screen
+                  name={ROUTES.config}
+                  component={Config}
+                  options={{
+                    title: "Configuración",
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons name={"settings"} size={size} color={color} />
+                    ),
+                  }}
+                />
+                <BottomTabs.Screen
+                  name={ROUTES.expendablesOverview}
+                  component={ExpendablesOverview}
+                  options={{
+                    title: "Un día sin...",
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons name={"skull"} size={size} color={color} />
+                    ),
+                    headerShown: false,
+                  }}
+                />
+                <BottomTabs.Screen
+                  name={ROUTES.manageExpendable}
+                  component={ManageExpendable}
+                  options={{
+                    title: "Manejar venenos",
+                    tabBarLabel: "",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons size={size} color={color} name={"add-circle"} />
+                    ),
+                  }}
+                />
+              </BottomTabs.Navigator>
+            </BottomSheetModalProvider>
+          </GestureHandlerRootView>
         </NavigationContainer>
       </ExpendablesContextProvider>
     </>

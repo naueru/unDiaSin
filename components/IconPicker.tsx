@@ -1,9 +1,11 @@
 // Core
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
-import { FC, useState } from "react";
-import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { FC, useRef } from "react";
+import { Pressable, StyleSheet, View } from "react-native";
 
 //Components
+import BSModal from "./BSModal";
 import PressableIcon from "./PressableIcon";
 
 // Types
@@ -25,16 +27,20 @@ const IconPicker: FC<TIconPickerProps> = ({
   onChange,
   name,
 }) => {
-  const [showList, setShowList] = useState(false);
+  const sheetRef = useRef<BottomSheetModal>(null);
 
   const handleSelect = (value: string) => {
     onChange(name, value);
-    setShowList(false);
+    sheetRef.current?.dismiss();
+  };
+
+  const handleOpenModal = () => {
+    sheetRef.current?.present();
   };
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => setShowList((current) => !current)}>
+      <Pressable onPress={handleOpenModal}>
         <View>
           <Ionicons
             name={value}
@@ -43,24 +49,25 @@ const IconPicker: FC<TIconPickerProps> = ({
           />
         </View>
       </Pressable>
-      {showList && (
-        <FlatList
+      <BSModal ref={sheetRef}>
+        <BottomSheetFlatList
           data={ICONS_SORTED.filter(
             (item: string) =>
               item.indexOf("sharp") === -1 && item.indexOf("outline") === -1
           )}
-          renderItem={({ item }) => (
-            <PressableIcon
-              name={item}
-              onPress={() => handleSelect(item)}
-              selected={item === value}
-              label={name}
-            />
-          )}
+          renderItem={({ item }: { item: TIcons }) => {
+            return (
+              <PressableIcon
+                name={item}
+                onPress={() => handleSelect(item)}
+                selected={item === value}
+              />
+            );
+          }}
           keyExtractor={(item) => "icon_" + item}
-          horizontal
+          numColumns={7}
         />
-      )}
+      </BSModal>
     </View>
   );
 };
