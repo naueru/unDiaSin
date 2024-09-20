@@ -19,6 +19,26 @@ export interface IColorVariants {
   light: IColors;
 }
 
+export type TColorProperties = {
+  backgroundColor: IColorKey;
+  borderBlockColor: IColorKey;
+  borderBlockEndColor: IColorKey;
+  borderBlockStartColor: IColorKey;
+  borderBottomColor: IColorKey;
+  borderColor: IColorKey;
+  borderEndColor: IColorKey;
+  borderLeftColor: IColorKey;
+  borderRightColor: IColorKey;
+  borderStartColor: IColorKey;
+  borderTopColor: IColorKey;
+  color: IColorKey;
+  overlayColor: IColorKey;
+  shadowColor: IColorKey;
+  textDecorationColor: IColorKey;
+  textShadowColor: IColorKey;
+  tintColor: IColorKey;
+};
+
 export interface IGlobalStyles {
   colors: IColorVariants & IColors;
   shadow: ShadowStyleIOS & {
