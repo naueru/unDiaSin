@@ -1,15 +1,21 @@
 // Core
 import { FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
-// Constants
-import { GLOBAL_STYLES } from "../constants/styles";
+// Hooks
+import { useColorTheme } from "../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
 
 type TTitle = {
   label: string;
 };
 
 const Title: FC<TTitle> = ({ label }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -19,13 +25,13 @@ const Title: FC<TTitle> = ({ label }) => {
 
 export default Title;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   label: {
-    color: GLOBAL_STYLES.colors.secondary800,
+    color: "secondary800",
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
