@@ -40,7 +40,7 @@ export type TColorProperties = {
 };
 
 export interface IGlobalStyles {
-  colors: IColorVariants & IColors;
+  colors: IColorVariants;
   shadow: ShadowStyleIOS & {
     elevation?: number | undefined;
   };
