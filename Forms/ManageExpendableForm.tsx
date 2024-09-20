@@ -1,6 +1,6 @@
 // Core
 import { FC, useState } from "react";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { Button, ScrollView, View } from "react-native";
 
 // Components
 import InputField from "./components/InputField";
@@ -8,12 +8,16 @@ import FieldsRow from "./components/FieldsRow";
 import IconPicker from "../components/IconPicker";
 import Title from "../components/Title";
 
+// Utils
+import { createThemedStyle } from "../utils/styles";
+
 // Types
 import { TIcons } from "../models/Icons";
 
 // Constants
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
+import { useColorTheme } from "../hooks/styles";
 
 export interface IFormInput {
   hasError: boolean;
@@ -112,6 +116,9 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
   onCancel,
   defaultValues,
 }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   const [inputs, setInputs] = useState<IFormInputs>(
     defaultValues || initialState
   );
@@ -237,13 +244,13 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
           <FieldsRow>
             <Button
               title="Cancel"
-              color={GLOBAL_STYLES.colors.primary200}
+              color={GLOBAL_STYLES.colors[scheme].primary200}
               onPress={handleCancel}
             />
 
             <Button
               title="Ok"
-              color={GLOBAL_STYLES.colors.accent500}
+              color={GLOBAL_STYLES.colors[scheme].accent500}
               onPress={handleSubmit}
             />
           </FieldsRow>
@@ -255,7 +262,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
 
 export default ManageExpendableForm;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   outerContainer: {
     flex: 1,
     maxWidth: 600,
