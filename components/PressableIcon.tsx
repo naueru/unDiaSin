@@ -35,7 +35,7 @@ const PressableIcon: FC<TIconPickerProps> = ({
           size={size}
           color={
             selected
-              ? GLOBAL_STYLES.colors.white
+              ? GLOBAL_STYLES.colors.secondary800
               : GLOBAL_STYLES.colors.accent500
           }
         />
