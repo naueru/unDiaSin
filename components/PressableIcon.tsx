@@ -1,7 +1,13 @@
 // Core
 import { Ionicons } from "@expo/vector-icons";
 import { FC, memo } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+
+// Hooks
+import { useColorTheme } from "../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
 
 // Types
 import { TIcons } from "../models/Icons";
@@ -24,6 +30,9 @@ const PressableIcon: FC<TIconPickerProps> = ({
   label,
   size = 30,
 }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   const handleSelect = () => {
     onPress(name);
   };
@@ -35,8 +44,8 @@ const PressableIcon: FC<TIconPickerProps> = ({
           size={size}
           color={
             selected
-              ? GLOBAL_STYLES.colors.secondary800
-              : GLOBAL_STYLES.colors.accent500
+              ? GLOBAL_STYLES.colors[scheme].secondary800
+              : GLOBAL_STYLES.colors[scheme].accent500
           }
         />
         {label ? <Text style={styles.text}>{label}</Text> : null}
@@ -47,7 +56,7 @@ const PressableIcon: FC<TIconPickerProps> = ({
 
 export default memo(PressableIcon);
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   iconContainer: {
     alignItems: "center",
     gap: 8,
@@ -55,7 +64,7 @@ const styles = StyleSheet.create({
     width: 50,
   },
   text: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontSize: 8,
     textAlign: "center",
   },
