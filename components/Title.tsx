@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   label: {
-    color: GLOBAL_STYLES.colors.white,
+    color: GLOBAL_STYLES.colors.secondary800,
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
