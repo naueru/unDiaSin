@@ -2,15 +2,20 @@
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { forwardRef, PropsWithChildren, useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-// Constants
-import { GLOBAL_STYLES } from "../constants/styles";
+// Hooks
+import { useColorTheme } from "../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
 
 type TBottomSheetModalProps = PropsWithChildren;
 
 const BSModal = forwardRef<BottomSheetModal, TBottomSheetModalProps>(
   ({ children }, ref) => {
+    const scheme = useColorTheme();
+    const styles = computedStyles[scheme];
     const renderBackdrop = useCallback(
       (props: BottomSheetDefaultBackdropProps) => (
         <BottomSheetBackdrop
@@ -38,12 +43,12 @@ const BSModal = forwardRef<BottomSheetModal, TBottomSheetModalProps>(
 
 export default BSModal;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   backGround: {
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
   },
   handle: {
-    backgroundColor: GLOBAL_STYLES.colors.primary200,
+    backgroundColor: "primary200",
   },
   container: {
     alignItems: "center",
