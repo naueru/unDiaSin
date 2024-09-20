@@ -1,9 +1,12 @@
 // Core
 import { FC, PropsWithChildren } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
-// Constants
-import { GLOBAL_STYLES } from "../constants/styles";
+// Hooks
+import { useColorTheme } from "../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
 
 type TFieldsRowProps = {
   label?: string;
@@ -11,6 +14,9 @@ type TFieldsRowProps = {
 } & PropsWithChildren;
 
 const Frame: FC<TFieldsRowProps> = ({ children, label, style }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   return (
     <View style={[styles.frame, style]}>
       {label && (
@@ -25,9 +31,9 @@ const Frame: FC<TFieldsRowProps> = ({ children, label, style }) => {
 
 export default Frame;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   frame: {
-    borderColor: GLOBAL_STYLES.colors.primary200,
+    borderColor: "primary200",
     borderRadius: 6,
     borderStyle: "solid",
     borderWidth: 1,
@@ -35,11 +41,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   frameLabel: {
-    color: GLOBAL_STYLES.colors.primary200,
+    color: "primary200",
   },
   frameLabelWrapper: {
     alignSelf: "flex-start",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     left: 10,
     paddingHorizontal: 8,
     position: "absolute",
