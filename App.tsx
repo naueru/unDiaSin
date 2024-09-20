@@ -3,23 +3,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-
-import { FC } from "react";
-
-// Components
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import DummyDataButton from "./components/DummyDataButton";
+import { FC } from "react";
 
 // Context
 import ExpendablesContextProvider from "./store/expendables-context";
+
+// Components
+import DummyDataButton from "./components/DummyDataButton";
 
 // Screens
 import ManageExpendable from "./screens/ManageExpendable";
 import AllExpendables from "./screens/AllExpendables";
 import ExpendableDetail from "./screens/ExpendableDetail";
 import Config from "./screens/Config";
+
+// Hooks
+import { useColorTheme } from "./hooks/styles";
 
 // Constants
 import { GLOBAL_STYLES } from "./constants/styles";
@@ -29,11 +31,14 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 const ExpendablesOverview: FC = () => {
+  const scheme = useColorTheme();
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: GLOBAL_STYLES.colors.primary500 },
-        headerTintColor: GLOBAL_STYLES.colors.white,
+        headerStyle: {
+          backgroundColor: GLOBAL_STYLES.colors[scheme].primary500,
+        },
+        headerTintColor: GLOBAL_STYLES.colors[scheme].secondary800,
       }}
     >
       <Stack.Screen
@@ -60,9 +65,10 @@ const ExpendablesOverview: FC = () => {
 };
 
 export default function App() {
+  const scheme = useColorTheme();
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style={scheme === "light" ? "dark" : "light"} />
       <ExpendablesContextProvider>
         <NavigationContainer>
           <GestureHandlerRootView style={{ flex: 1 }}>
@@ -70,13 +76,13 @@ export default function App() {
               <BottomTabs.Navigator
                 screenOptions={{
                   headerStyle: {
-                    backgroundColor: GLOBAL_STYLES.colors.primary500,
+                    backgroundColor: GLOBAL_STYLES.colors[scheme].primary500,
                   },
-                  headerTintColor: GLOBAL_STYLES.colors.white,
+                  headerTintColor: GLOBAL_STYLES.colors[scheme].secondary800,
                   tabBarStyle: {
-                    backgroundColor: GLOBAL_STYLES.colors.primary500,
+                    backgroundColor: GLOBAL_STYLES.colors[scheme].primary500,
                   },
-                  tabBarActiveTintColor: GLOBAL_STYLES.colors.accent500,
+                  tabBarActiveTintColor: GLOBAL_STYLES.colors[scheme].accent500,
                   tabBarShowLabel: false,
                 }}
                 initialRouteName={ROUTES.expendablesOverview}
