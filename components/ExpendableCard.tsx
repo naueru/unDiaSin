@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   savings: {
-    color: GLOBAL_STYLES.colors.white,
+    color: GLOBAL_STYLES.colors.secondary800,
     textAlign: "right",
   },
 });
