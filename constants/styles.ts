@@ -23,7 +23,6 @@ const COLOR_VARIANTS: IColorVariants = {
 
 export const GLOBAL_STYLES: IGlobalStyles = {
   colors: {
-    ...COLOR_VARIANTS.dark,
     ...COLOR_VARIANTS,
   },
   shadow: {
