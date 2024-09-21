@@ -4,6 +4,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FC, useContext } from "react";
 import { Button, FlatList, StyleSheet, View } from "react-native";
 
+// Hooks
+import { useColorTheme } from "../hooks/styles";
+
 // Context
 import {
   ExpendablesContext,
@@ -14,11 +17,15 @@ import {
 import Title from "../components/Title";
 import ExpendableCard from "../components/ExpendableCard";
 
+// Utils
+import { createThemedStyle } from "../utils/styles";
+
 // Constants
 import { ROUTES } from "../constants/constants";
-import { GLOBAL_STYLES } from "../constants/styles";
 
 const AllExpendables: FC = () => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
   const ExpendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -50,9 +57,9 @@ const AllExpendables: FC = () => {
 
 export default AllExpendables;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   outerContainer: {
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     flex: 1,
     justifyContent: "center",
   },
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
   },
   emptyContentContainer: {
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     gap: 32,
   },
 });
