@@ -1,7 +1,7 @@
 // Core
 import { Ionicons } from "@expo/vector-icons";
 import { FC, useContext, useLayoutEffect } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Components
@@ -25,11 +25,15 @@ import { TExpendable } from "../models/Expendables";
 import { GLOBAL_STYLES } from "../constants/styles";
 import { DEFAULT_EXPENDABLE } from "../constants/defaults";
 import { ROUTES } from "../constants/constants";
+import { useColorTheme } from "../hooks/styles";
+import { createThemedStyle } from "../utils/styles";
 
 const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   route,
   navigation,
 }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const { expendables } = expendablesCtx;
   const expendable =
@@ -116,7 +120,7 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
         <Ionicons
           name={icon}
           size={80}
-          color={GLOBAL_STYLES.colors.accent500}
+          color={GLOBAL_STYLES.colors[scheme].accent500}
         />
       </View>
 
@@ -162,10 +166,10 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
 
 export default ExpendableDetail;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     flex: 1,
     gap: 32,
     justifyContent: "center",
@@ -173,8 +177,8 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     ...GLOBAL_STYLES.shadow,
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
-    borderColor: GLOBAL_STYLES.colors.accent500,
+    backgroundColor: "primary500",
+    borderColor: "accent500",
     borderStyle: "solid",
     borderWidth: 1,
     borderRadius: 16,
@@ -185,11 +189,11 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   detail: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontSize: 16,
   },
   achievement: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,
