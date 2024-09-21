@@ -3,13 +3,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FC, PropsWithChildren } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
+
+// Hooks
+import { useColorTheme } from "../hooks/styles";
 
 // Components
 import Title from "./Title";
 
 // Utils
 import { getDaysDiff } from "../utils/date";
+import { createThemedStyle } from "../utils/styles";
 
 // Types
 import { TExpendable } from "../models/Expendables";
@@ -24,6 +28,9 @@ type TExpendableCardProps = {
 
 const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
 
   const { icon, id, name, initDay, initMonth, initYear, cost, timesPerDay } =
     expendable;
@@ -54,7 +61,7 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
           <Ionicons
             name={icon}
             size={60}
-            color={GLOBAL_STYLES.colors.accent500}
+            color={GLOBAL_STYLES.colors[scheme].accent500}
           />
         </View>
         <View style={styles.contentContainer}>
@@ -72,7 +79,7 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
           <Ionicons
             name="chevron-forward"
             size={40}
-            color={GLOBAL_STYLES.colors.primary200}
+            color={GLOBAL_STYLES.colors[scheme].primary200}
           />
         </View>
       </View>
@@ -82,12 +89,12 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
 
 export default ExpendableCard;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     ...GLOBAL_STYLES.shadow,
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
-    borderColor: GLOBAL_STYLES.colors.accent500,
+    backgroundColor: "primary500",
+    borderColor: "accent500",
     borderRadius: 6,
     borderStyle: "solid",
     borderWidth: 1,
@@ -97,12 +104,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   iconontainer: {
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
   },
   contentContainer: {
     alignItems: "flex-start",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
-    borderLeftColor: GLOBAL_STYLES.colors.primary200,
+    backgroundColor: "primary500",
+    borderLeftColor: "primary200",
     borderLeftWidth: 1,
     borderStyle: "solid",
     flex: 1,
@@ -115,7 +122,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   elapsed: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "right",
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   savings: {
-    color: GLOBAL_STYLES.colors.secondary800,
+    color: "secondary800",
     textAlign: "right",
   },
 });
