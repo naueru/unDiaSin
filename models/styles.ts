@@ -1,4 +1,5 @@
 import { ImageStyle, ShadowStyleIOS, TextStyle, ViewStyle } from "react-native";
+import { TStyle } from "../utils/styles";
 
 export type THexColor = `#${string}`;
 
@@ -39,11 +40,10 @@ export type TColorProperties = {
   tintColor: IColorKey;
 };
 
+export type TShadowStyles = "elevation" & ShadowStyleIOS;
 export interface IGlobalStyles {
   colors: IColorVariants;
-  shadow: ShadowStyleIOS & {
-    elevation?: number | undefined;
-  };
+  shadow: Pick<TStyle, TShadowStyles>;
 }
 
 export type NamedStyles = ViewStyle | TextStyle | ImageStyle;
