@@ -12,26 +12,27 @@ import { createThemedStyle } from "../utils/styles";
 // Constants
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
+import ThemeToggle from "../components/ThemeToggle";
+import Title from "../components/Title";
 
 const Config: FC = () => {
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
+  const isDark = scheme === "dark";
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Config</Text>
+      <Title label="Tema" />
       <View style={styles.theme}>
-        <Text style={styles.title}>{scheme}</Text>
         <View style={styles.themeButtons}>
-          <Button
-            onPress={() => Appearance.setColorScheme("dark")}
-            title="dark"
-          />
-          <Button
-            onPress={() => Appearance.setColorScheme("light")}
-            title="light"
+          <ThemeToggle
+            onChange={(value: boolean) =>
+              Appearance.setColorScheme(value ? "dark" : "light")
+            }
+            value={isDark}
           />
         </View>
       </View>
+      <Title label="Idioma" />
       <FlatList
         data={ICONS_SORTED.filter(
           (item: string) =>
@@ -58,10 +59,11 @@ export default Config;
 
 const computedStyles = createThemedStyle({
   container: {
+    alignItems: "center",
     backgroundColor: "primary500",
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    padding: 32,
   },
   iconContainer: {
     width: 50,
