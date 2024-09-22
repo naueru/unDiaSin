@@ -19,6 +19,20 @@ const COLOR_VARIANTS: IColorVariants = {
     error500: "#F30A49",
     white: "#FFFFFF",
   },
+  common: {
+    themeToggle: {
+      border: "#537EC5",
+      lightSky: "#87CEEB",
+      darkSky: "#0A0B3A",
+      moon: "#FFFFFF",
+      stars: "#FFFFFF",
+      cloud: "#FFFFFF",
+      sun: "#F39422",
+      lightMountain: "#76552B",
+      darkMountain: "#402905",
+      lens: "#FFFFFF",
+    },
+  },
 };
 
 export const GLOBAL_STYLES: IGlobalStyles = {
