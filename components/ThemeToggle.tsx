@@ -1,6 +1,6 @@
 // Core
 import { Ionicons } from "@expo/vector-icons";
-import { FC, PropsWithChildren, useRef } from "react";
+import { FC, PropsWithChildren, useEffect, useRef } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 
 // Utils
@@ -13,40 +13,17 @@ type TThemeToggle = {
 
 const lightAnimationConfig = {
   toValue: 1,
-  duration: 500,
+  duration: 400,
   useNativeDriver: true,
 };
 
 const darkAnimationConfig = {
   toValue: 0,
-  duration: 500,
+  duration: 400,
   useNativeDriver: true,
 };
 
 const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
-  const handlePress = () => {
-    onChange(!value);
-    if (value) {
-      Animated.parallel([
-        sunMoonMoveRight,
-        lensMoveRight,
-        sunFadeIn,
-        mountainMoveRight,
-        cloudMoveRight,
-        starsFadeIn,
-      ]).start();
-    } else {
-      Animated.parallel([
-        sunMoonMoveLeft,
-        lensMoveLeft,
-        sunFadeOut,
-        mountainMoveLeft,
-        cloudMoveLeft,
-        starsFadeOut,
-      ]).start();
-    }
-  };
-
   const lensAnim = useRef(new Animated.Value(0)).current;
   const lensMoveRight = Animated.timing(lensAnim, lightAnimationConfig);
   const lensMoveLeft = Animated.timing(lensAnim, darkAnimationConfig);
@@ -89,6 +66,35 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
 
   const { moon, stars, cloud, lightMountain, darkMountain, lens } =
     GLOBAL_STYLES.colors.common.themeToggle;
+
+  const darkTolightAnimations = Animated.parallel([
+    sunMoonMoveRight,
+    lensMoveRight,
+    sunFadeIn,
+    mountainMoveRight,
+    cloudMoveRight,
+    starsFadeIn,
+  ]);
+
+  const lightToDarkAnimations = Animated.parallel([
+    sunMoonMoveLeft,
+    lensMoveLeft,
+    sunFadeOut,
+    mountainMoveLeft,
+    cloudMoveLeft,
+    starsFadeOut,
+  ]);
+
+  const handlePress = () => onChange(!value);
+
+  useEffect(() => {
+    if (value) {
+      lightToDarkAnimations.start();
+    } else {
+      darkTolightAnimations.start();
+    }
+  }, [value]);
+
   return (
     <Pressable onPress={handlePress}>
       <View style={styles.container}>
