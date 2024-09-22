@@ -18,6 +18,20 @@ export type IColorKey = keyof IColors;
 export interface IColorVariants {
   dark: IColors;
   light: IColors;
+  common: {
+    themeToggle: {
+      border: THexColor;
+      lightSky: THexColor;
+      darkSky: THexColor;
+      moon: THexColor;
+      stars: THexColor;
+      cloud: THexColor;
+      sun: THexColor;
+      lightMountain: THexColor;
+      darkMountain: THexColor;
+      lens: THexColor;
+    };
+  };
 }
 
 export type TColorProperties = {
