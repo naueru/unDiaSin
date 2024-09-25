@@ -1,5 +1,6 @@
 // Core
 import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { Appearance, Text, View } from "react-native";
 import { FC, useContext, useRef } from "react";
@@ -24,12 +25,14 @@ import { createThemedStyle } from "../utils/styles";
 import { TIcons } from "../models/Icons";
 
 // Constants
+import { STORAGE_KEY_THEME } from "../constants/constants";
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
 
 const Config: FC = () => {
   const { translation, chooseLanguage, language } =
     useContext(TranslationsContext);
+  const asyncStorage = useAsyncStorage(STORAGE_KEY_THEME);
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
   const isDark = scheme === "dark";
@@ -39,9 +42,10 @@ const Config: FC = () => {
       <Title label={translation.CONFIG_THEME_TITLE} />
 
       <ThemeToggle
-        onChange={(value: boolean) =>
-          Appearance.setColorScheme(value ? "dark" : "light")
-        }
+        onChange={(value: boolean) => {
+          Appearance.setColorScheme(value ? "dark" : "light");
+          asyncStorage.setItem(value ? "dark" : "light");
+        }}
         value={isDark}
       />
 
@@ -96,13 +100,13 @@ const computedStyles = createThemedStyle({
     alignItems: "center",
   },
   iconContainer: {
-    width: 50,
-    height: 50,
     alignItems: "center",
+    height: 50,
+    width: 50,
   },
   text: {
+    color: "accent500",
     fontSize: 8,
     textAlign: "center",
-    color: "accent500",
   },
 });
