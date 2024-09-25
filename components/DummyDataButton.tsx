@@ -1,12 +1,14 @@
 // Core
 import { FC, useContext } from "react";
-import { Button } from "react-native";
 
 // Context
 import {
   ExpendablesContext,
   IExpendablesContext,
 } from "../store/expendables-context";
+
+// Components
+import Button from "./Button";
 
 const DummyDataButton: FC = () => {
   const ctx = useContext<IExpendablesContext>(ExpendablesContext);
@@ -26,6 +28,7 @@ const DummyDataButton: FC = () => {
         })
       }
       title="+"
+      primary={false}
     />
   );
 };
