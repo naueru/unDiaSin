@@ -60,8 +60,6 @@ const computedStyles = createThemedStyle({
   iconContainer: {
     alignItems: "center",
     gap: 8,
-    height: 50,
-    width: 50,
   },
   text: {
     color: "accent500",
