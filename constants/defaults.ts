@@ -13,3 +13,5 @@ export const DEFAULT_EXPENDABLE: TExpendable = {
   cost: "0",
   timesPerDay: "0",
 };
+
+export const DEFAULT_LANGUAGE = "spanish";
