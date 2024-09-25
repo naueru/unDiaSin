@@ -2,7 +2,10 @@
 import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { FC, useRef } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, View } from "react-native";
+
+// Hooks
+import { useColorTheme } from "../hooks/styles";
 
 //Components
 import BSModal from "./BSModal";
@@ -10,6 +13,9 @@ import PressableIcon from "./PressableIcon";
 
 // Types
 import { TIcons } from "../models/Icons";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
 
 //Constants
 import { ICONS_SORTED } from "../constants/IconsSorted";
@@ -28,6 +34,8 @@ const IconPicker: FC<TIconPickerProps> = ({
   name,
 }) => {
   const sheetRef = useRef<BottomSheetModal>(null);
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
 
   const handleSelect = (value: string) => {
     onChange(name, value);
@@ -45,7 +53,7 @@ const IconPicker: FC<TIconPickerProps> = ({
           <Ionicons
             name={value}
             size={60}
-            color={GLOBAL_STYLES.colors.accent500}
+            color={GLOBAL_STYLES.colors[scheme].accent500}
           />
         </View>
       </Pressable>
@@ -57,15 +65,18 @@ const IconPicker: FC<TIconPickerProps> = ({
           )}
           renderItem={({ item }: { item: TIcons }) => {
             return (
-              <PressableIcon
-                name={item}
-                onPress={() => handleSelect(item)}
-                selected={item === value}
-              />
+              <View style={styles.iconContainer}>
+                <PressableIcon
+                  name={item}
+                  onPress={() => handleSelect(item)}
+                  selected={item === value}
+                />
+              </View>
             );
           }}
           keyExtractor={(item) => "icon_" + item}
           numColumns={7}
+          contentContainerStyle={styles.contentContainer}
         />
       </BSModal>
     </View>
@@ -74,10 +85,9 @@ const IconPicker: FC<TIconPickerProps> = ({
 
 export default IconPicker;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
     gap: 16,
     justifyContent: "center",
     maxHeight: 300,
@@ -87,5 +97,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
     width: 50,
+  },
+  contentContainer: {
+    alignItems: "center",
   },
 });

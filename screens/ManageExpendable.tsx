@@ -1,33 +1,42 @@
 // Core
 import { useIsFocused } from "@react-navigation/native";
-import { FC, useContext, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { FC, useContext, useEffect, useLayoutEffect } from "react";
+import { View } from "react-native";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Context
+import { TranslationsContext } from "../store/language-context";
 import {
   ExpendablesContext,
   IExpendablesContext,
 } from "../store/expendables-context";
+
+// Hooks
+import { useColorTheme } from "../hooks/styles";
 
 // Components
 import ManageExpendableForm, {
   IFormInputs,
 } from "../Forms/ManageExpendableForm";
 
+// Utils
+import { createThemedStyle } from "../utils/styles";
+
 // Types
 import { TExpendable } from "../models/Expendables";
 
 // Constants
-import { GLOBAL_STYLES } from "../constants/styles";
 import { ROUTES } from "../constants/constants";
 
 const ManageExpendable: FC<NativeStackNavigatorProps> = ({
   route,
   navigation,
 }) => {
+  const { translation } = useContext(TranslationsContext);
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const isFocused = useIsFocused();
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
 
   const { expendables } = expendablesCtx;
   const expendable = expendables.find(
@@ -97,11 +106,19 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
     }
   }, [isFocused, isEditing]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditing
+        ? translation.EDIT_SCREEN_TITLE
+        : translation.ADD_SCREEN_TITLE,
+    });
+  });
+
   return (
     <View style={styles.container}>
       {isFocused ? (
         <ManageExpendableForm
-          label="Nuevo Veneno"
+          label={isEditing ? expendable?.name : translation.NEW_EXPENDABLE}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
           defaultValues={defaultValues}
@@ -113,10 +130,10 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
 
 export default ManageExpendable;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     flex: 1,
     justifyContent: "center",
   },

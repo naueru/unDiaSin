@@ -1,9 +1,15 @@
 // Core
 import { FC, PropsWithChildren, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-// Constants
+// Hooks
+import { useColorTheme } from "../../hooks/styles";
+
+// Components
 import Frame from "../../components/Frame";
+
+// Utils
+import { createThemedStyle } from "../../utils/styles";
 
 type TFieldsRowProps = {
   label?: string;
@@ -13,6 +19,8 @@ const Wrapper: FC<TFieldsRowProps> = ({ children, label }) =>
   label ? <Frame label={label}>{children}</Frame> : <View>{children}</View>;
 
 const FieldsRow: FC<TFieldsRowProps> = ({ children, label }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
   return (
     <Wrapper label={label}>
       <View style={styles.rowGroup}>
@@ -30,10 +38,10 @@ const FieldsRow: FC<TFieldsRowProps> = ({ children, label }) => {
 
 export default FieldsRow;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   rowGroup: {
-    gap: 16,
     flexDirection: "row",
+    gap: 16,
   },
   rowGroupField: {
     flex: 1,

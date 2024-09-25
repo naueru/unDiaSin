@@ -1,19 +1,30 @@
 // Core
-import { FC, useState } from "react";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { FC, useContext, useState } from "react";
+import { ScrollView, View } from "react-native";
+
+// Context
+import { TranslationsContext } from "../store/language-context";
+
+// Hooks
+import { useColorTheme } from "../hooks/styles";
 
 // Components
 import InputField from "./components/InputField";
 import FieldsRow from "./components/FieldsRow";
 import IconPicker from "../components/IconPicker";
+import Button from "../components/Button";
 import Title from "../components/Title";
+
+// Utils
+import { fillTranslation } from "../utils/translations";
+import { createThemedStyle } from "../utils/styles";
+import { getMaxDaysInMonth } from "../utils/date";
 
 // Types
 import { TIcons } from "../models/Icons";
 
 // Constants
 import { ICONS_SORTED } from "../constants/IconsSorted";
-import { GLOBAL_STYLES } from "../constants/styles";
 
 export interface IFormInput {
   hasError: boolean;
@@ -76,16 +87,20 @@ const initialState: IFormInputs = {
 };
 
 interface IValidator {
-  [key: string]: (key: string) => boolean;
+  [key: string]: (value: string, current: IFormInputs) => boolean;
 }
 
 const validators: IValidator = {
   name: (value: string) => {
     return value.length > 0 && value.length <= 30;
   },
-  initDay: (value: string) => {
+  initDay: (value: string, current: IFormInputs) => {
     const val = Number(value);
-    return val > 0 && val <= 31;
+    return (
+      val > 0 &&
+      val <=
+        getMaxDaysInMonth(+current?.initMonth?.value, +current?.initYear?.value)
+    );
   },
   initMonth: (value: string) => {
     const val = Number(value);
@@ -112,6 +127,10 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
   onCancel,
   defaultValues,
 }) => {
+  const { translation } = useContext(TranslationsContext);
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   const [inputs, setInputs] = useState<IFormInputs>(
     defaultValues || initialState
   );
@@ -120,7 +139,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
     let hasErrors = false;
     const state = { ...inputs };
     for (let input in inputs) {
-      const isValid = validators[input](inputs[input].value);
+      const isValid = validators[input](inputs[input].value, inputs);
       if (!isValid) {
         hasErrors = true;
         state[input].hasError = true;
@@ -155,7 +174,9 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
         ...current,
         [name]: {
           ...current[name],
-          hasError: inputs[name].hasError ? !validators[name](value) : false,
+          hasError: inputs[name].hasError
+            ? !validators[name](value, current)
+            : false,
           isDirty: true,
           value,
         },
@@ -174,59 +195,88 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
         />
         <InputField
           name="name"
-          label="Nombre"
+          label={translation.NAME}
           value={inputs.name.value}
-          error={inputs.name.hasError ? "30 caracteres máximo" : ""}
+          error={
+            inputs.name.hasError
+              ? fillTranslation(translation.ERROR_MAX_CHARS, { max: 30 })
+              : ""
+          }
           onChange={handleInputChange}
         />
-        <FieldsRow label="Fecha de inicio">
+        <FieldsRow label={translation.START_DATE}>
           <InputField
             name="initDay"
-            label="Día"
+            label={translation.DAY}
             placeholder=""
             type="decimal-pad"
             value={inputs.initDay.value}
-            error={inputs.initDay.hasError ? "Número (1-31)" : ""}
+            error={
+              inputs.initDay.hasError
+                ? fillTranslation(translation.ERROR_NUMBER_START_END, {
+                    start: 1,
+                    end: getMaxDaysInMonth(
+                      +inputs?.initMonth?.value,
+                      +inputs?.initYear?.value
+                    ),
+                  })
+                : ""
+            }
             onChange={handleInputChange}
             centered
           />
           <InputField
             name="initMonth"
-            label="Mes"
+            label={translation.MONTH}
             placeholder=""
             type="decimal-pad"
             value={inputs.initMonth.value}
-            error={inputs.initMonth.hasError ? "Número (1-12)" : ""}
+            error={
+              inputs.initMonth.hasError
+                ? fillTranslation(translation.ERROR_NUMBER_START_END, {
+                    start: 1,
+                    end: 12,
+                  })
+                : ""
+            }
             onChange={handleInputChange}
             centered
           />
           <InputField
             name="initYear"
-            label="Año"
+            label={translation.YEAR}
             placeholder=""
             type="decimal-pad"
             value={inputs.initYear.value}
-            error={inputs.initYear.hasError ? "Año inválido" : ""}
+            error={
+              inputs.initYear.hasError ? translation.ERROR_INVALID_YEAR : ""
+            }
             onChange={handleInputChange}
             centered
           />
         </FieldsRow>
-        <FieldsRow label="Costo económico">
+        <FieldsRow label={translation.EXPENSES}>
           <InputField
             name="cost"
-            label="Costo $"
+            label={`${translation.COST} ${translation.CURRENCY}`}
             value={inputs.cost.value}
-            error={inputs.cost.hasError ? "Debe ser número positivo" : ""}
+            error={
+              inputs.cost.hasError
+                ? translation.ERROR_MUST_BE_POSITIVE_NUMBER
+                : ""
+            }
             type="decimal-pad"
             onChange={handleInputChange}
             centered
           />
           <InputField
             name="timesPerDay"
-            label="X día"
+            label={translation.QUANTITY_PER_DAY}
             value={inputs.timesPerDay.value}
             error={
-              inputs.timesPerDay.hasError ? "Debe ser número positivo" : ""
+              inputs.timesPerDay.hasError
+                ? translation.ERROR_MUST_BE_POSITIVE_NUMBER
+                : ""
             }
             type="decimal-pad"
             onChange={handleInputChange}
@@ -236,16 +286,12 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
         <View style={styles.buttonGroup}>
           <FieldsRow>
             <Button
-              title="Cancel"
-              color={GLOBAL_STYLES.colors.primary200}
+              title={translation.CANCEL}
               onPress={handleCancel}
+              primary={false}
             />
 
-            <Button
-              title="Ok"
-              color={GLOBAL_STYLES.colors.accent500}
-              onPress={handleSubmit}
-            />
+            <Button title={translation.OK} onPress={handleSubmit} />
           </FieldsRow>
         </View>
       </View>
@@ -255,7 +301,7 @@ const ManageExpendableForm: FC<TInputFieldProps> = ({
 
 export default ManageExpendableForm;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   outerContainer: {
     flex: 1,
     maxWidth: 600,

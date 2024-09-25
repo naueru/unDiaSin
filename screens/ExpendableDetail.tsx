@@ -1,22 +1,28 @@
 // Core
 import { Ionicons } from "@expo/vector-icons";
-import { FC, useContext, useLayoutEffect } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
+import { FC, useContext, useLayoutEffect } from "react";
+import { Alert, Text, View } from "react-native";
 
-// Components
-import Title from "../components/Title";
-import Frame from "../components/Frame";
-import PressableIcon from "../components/PressableIcon";
+// Hooks
+import { useColorTheme } from "../hooks/styles";
 
 // Context
+import { TranslationsContext } from "../store/language-context";
 import {
   ExpendablesContext,
   IExpendablesContext,
 } from "../store/expendables-context";
 
+// Components
+import PressableIcon from "../components/PressableIcon";
+import Title from "../components/Title";
+import Frame from "../components/Frame";
+
 // Utils
+import { createThemedStyle } from "../utils/styles";
 import { getDaysDiff } from "../utils/date";
+import { fillTranslation } from "../utils/translations";
 
 // Types
 import { TExpendable } from "../models/Expendables";
@@ -30,6 +36,9 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   route,
   navigation,
 }) => {
+  const { translation } = useContext(TranslationsContext);
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const { expendables } = expendablesCtx;
   const expendable =
@@ -47,15 +56,21 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   const days: number = getDaysDiff(today, initialDate);
 
   const since: string =
-    days > 0
+    days < 0
+      ? fillTranslation(translation.YOU_WILL_START_SOON, {
+          days: Math.abs(days),
+        })
+      : days > 0
       ? days > 1
-        ? `¡Llevas ${days} días!`
-        : `¡Llevas 1 día!`
-      : "Diste el primer paso!";
+        ? fillTranslation(translation.ITS_BEEN_X_DAYS, { days })
+        : translation.ITS_BEEN_ONE_DAY
+      : translation.YOU_TOOK_THE_FISRT_STEP;
 
   const isSaving: boolean = !!(+cost && +timesPerDay);
 
-  const savedAmount: number = isSaving ? +cost * +timesPerDay * days : +cost;
+  const savedAmount: number = isSaving
+    ? Math.max(0, +cost * +timesPerDay * days)
+    : +cost;
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: name });
@@ -63,12 +78,12 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
 
   const handleDelete = () => {
     Alert.alert(
-      "¿Estás seguro?",
-      "Esta acción es irreversible",
+      translation.ARE_YOU_SURE,
+      translation.REMOVE_DESCRIPTION,
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: translation.CANCEL, style: "cancel" },
         {
-          text: "Eliminar",
+          text: translation.REMOVE,
           style: "destructive",
           onPress: () => {
             expendablesCtx.deleteExpendable(route.params.id);
@@ -88,12 +103,12 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
 
   const handleRestart = () => {
     Alert.alert(
-      "¿Estás seguro?",
-      "Esto pondrá hoy como día de inicio",
+      translation.ARE_YOU_SURE,
+      translation.RESTART_DESCRIPTION,
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: translation.CANCEL, style: "cancel" },
         {
-          text: "Reiniciar",
+          text: translation.RESTART,
           onPress: () => {
             const today = new Date();
 
@@ -116,42 +131,53 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
         <Ionicons
           name={icon}
           size={80}
-          color={GLOBAL_STYLES.colors.accent500}
+          color={GLOBAL_STYLES.colors[scheme].accent500}
         />
       </View>
 
       <Title label={name} />
-      <Frame label="Fecha" style={styles.detailContainer}>
+      <Frame label={translation.DATE} style={styles.detailContainer}>
         <Text style={styles.detail}>
-          Fecha de inicio: {`${initDay}/${initMonth}/${initYear}`}
+          {translation.START_DATE}:{" "}
+          {fillTranslation(translation.FORMATTED_DATE, {
+            day: initDay,
+            month: initMonth,
+            year: initYear,
+          })}
         </Text>
         <Text style={styles.achievement}>{since}</Text>
       </Frame>
       {isSaving ? (
-        <Frame label="Ahorro" style={styles.detailContainer}>
-          <Text style={styles.detail}>Costo: ${cost}</Text>
-          <Text style={styles.detail}>Cantidad por día: {timesPerDay}</Text>
+        <Frame label={translation.SAVINGS} style={styles.detailContainer}>
+          <Text style={styles.detail}>
+            {translation.COST}: {translation.CURRENCY}
+            {cost}
+          </Text>
+          <Text style={styles.detail}>
+            {translation.QUANTITY_PER_DAY}: {timesPerDay}
+          </Text>
           <Text style={styles.achievement}>
-            Llevas ahorrado ${savedAmount}!
+            {translation.YOU_HAVE_SAVED} {translation.CURRENCY}
+            {savedAmount}!
           </Text>
         </Frame>
       ) : null}
       <View style={styles.actions}>
         <PressableIcon
           name="reload"
-          label="Reiniciar"
+          label={translation.RESTART}
           size={40}
           onPress={handleRestart}
         />
         <PressableIcon
           name="pencil"
-          label="Editar"
+          label={translation.EDIT}
           size={40}
           onPress={handleEdit}
         />
         <PressableIcon
           name="trash"
-          label="Eliminar"
+          label={translation.REMOVE}
           size={40}
           onPress={handleDelete}
         />
@@ -162,10 +188,10 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
 
 export default ExpendableDetail;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     alignItems: "center",
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
+    backgroundColor: "primary500",
     flex: 1,
     gap: 32,
     justifyContent: "center",
@@ -173,8 +199,8 @@ const styles = StyleSheet.create({
   },
   iconWrapper: {
     ...GLOBAL_STYLES.shadow,
-    backgroundColor: GLOBAL_STYLES.colors.primary500,
-    borderColor: GLOBAL_STYLES.colors.accent500,
+    backgroundColor: "primary500",
+    borderColor: "accent500",
     borderStyle: "solid",
     borderWidth: 1,
     borderRadius: 16,
@@ -185,11 +211,11 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   detail: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontSize: 16,
   },
   achievement: {
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 20,

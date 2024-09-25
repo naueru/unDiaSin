@@ -1,6 +1,12 @@
+// Core
 import { FC } from "react";
-import { KeyboardType, StyleSheet, Text, TextInput, View } from "react-native";
-import { GLOBAL_STYLES } from "../../constants/styles";
+import { KeyboardType, Text, TextInput, View } from "react-native";
+
+// Hooks
+import { useColorTheme } from "../../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../../utils/styles";
 
 type TInputFieldProp = {
   error?: string;
@@ -23,6 +29,9 @@ const InputField: FC<TInputFieldProp> = ({
   onChange,
   centered,
 }) => {
+  const scheme = useColorTheme();
+  const styles = computedStyles[scheme];
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
@@ -44,24 +53,24 @@ const InputField: FC<TInputFieldProp> = ({
 
 export default InputField;
 
-const styles = StyleSheet.create({
+const computedStyles = createThemedStyle({
   container: {
     gap: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   label: {
-    color: GLOBAL_STYLES.colors.primary200,
+    color: "primary200",
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "left",
   },
   input: {
-    borderColor: GLOBAL_STYLES.colors.primary200,
+    borderColor: "primary200",
     borderStyle: "solid",
     borderRadius: 6,
     borderWidth: 1,
-    color: GLOBAL_STYLES.colors.accent500,
+    color: "accent500",
     fontSize: 16,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -70,11 +79,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   error: {
-    color: GLOBAL_STYLES.colors.error500,
+    color: "error500",
     fontSize: 12,
     textAlign: "right",
   },
   errorBorder: {
-    borderColor: GLOBAL_STYLES.colors.error500,
+    borderColor: "error500",
   },
 });
