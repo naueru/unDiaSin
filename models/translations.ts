@@ -45,3 +45,8 @@ export type TTranslations = {
 };
 
 export type TTranslationsKeys = keyof TTranslations;
+
+export type TLanguageSelectData = {
+  value: string;
+  label: string;
+};
