@@ -58,6 +58,7 @@ const Config: FC = () => {
       />
       <BSModal ref={sheetRef}>
         <BottomSheetFlatList
+          contentContainerStyle={styles.contentContainer}
           data={ICONS_SORTED.filter(
             (item: TIcons) =>
               item.indexOf("sharp") === -1 && item.indexOf("outline") === -1
@@ -90,6 +91,9 @@ const computedStyles = createThemedStyle({
     gap: 32,
     justifyContent: "center",
     padding: 32,
+  },
+  contentContainer: {
+    alignItems: "center",
   },
   iconContainer: {
     width: 50,
