@@ -38,4 +38,5 @@ export const spanish: TTranslation = {
   ERROR_MAX_CHARS: "{{ max }} caracteres máximo",
   ERROR_NUMBER_START_END: "Número ({{ start }}-{{ end }})",
   ERROR_INVALID_YEAR: "Año inválido",
+  ERROR_MUST_BE_POSITIVE_NUMBER: "Debe ser número positivo",
 };
