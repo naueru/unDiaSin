@@ -2,20 +2,22 @@
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { FC, useContext } from "react";
-import { Button, FlatList, StyleSheet, View } from "react-native";
+import { FlatList, View } from "react-native";
 
 // Hooks
 import { useColorTheme } from "../hooks/styles";
 
 // Context
+import { TranslationsContext } from "../store/language-context";
 import {
   ExpendablesContext,
   IExpendablesContext,
 } from "../store/expendables-context";
 
 // Components
-import Title from "../components/Title";
 import ExpendableCard from "../components/ExpendableCard";
+import Button from "../components/Button";
+import Title from "../components/Title";
 
 // Utils
 import { createThemedStyle } from "../utils/styles";
@@ -24,6 +26,7 @@ import { createThemedStyle } from "../utils/styles";
 import { ROUTES } from "../constants/constants";
 
 const AllExpendables: FC = () => {
+  const { translation } = useContext(TranslationsContext);
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
   const ExpendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
@@ -42,12 +45,12 @@ const AllExpendables: FC = () => {
     </View>
   ) : (
     <View style={styles.emptyContentContainer}>
-      <Title label="Todavía no tienes nada agregado" />
+      <Title label={translation.ALL_EXPENDABLES_EMPTY_LABEL} />
       <Button
         onPress={() => {
           navigation.navigate(ROUTES.manageExpendable);
         }}
-        title="Nuevo veneno"
+        title={translation.NEW_EXPENDABLE}
       />
     </View>
   );
