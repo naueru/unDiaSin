@@ -65,15 +65,18 @@ const IconPicker: FC<TIconPickerProps> = ({
           )}
           renderItem={({ item }: { item: TIcons }) => {
             return (
-              <PressableIcon
-                name={item}
-                onPress={() => handleSelect(item)}
-                selected={item === value}
-              />
+              <View style={styles.iconContainer}>
+                <PressableIcon
+                  name={item}
+                  onPress={() => handleSelect(item)}
+                  selected={item === value}
+                />
+              </View>
             );
           }}
           keyExtractor={(item) => "icon_" + item}
           numColumns={7}
+          contentContainerStyle={styles.contentContainer}
         />
       </BSModal>
     </View>
@@ -94,5 +97,8 @@ const computedStyles = createThemedStyle({
     alignItems: "center",
     height: 50,
     width: 50,
+  },
+  contentContainer: {
+    alignItems: "center",
   },
 });
