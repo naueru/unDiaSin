@@ -11,6 +11,10 @@ export interface IColors {
   accent500: THexColor;
   error500: THexColor;
   white: THexColor;
+  primaryText: THexColor;
+  secondaryText: THexColor;
+  primaryButton: THexColor;
+  secondaryButton: THexColor;
 }
 
 export type IColorKey = keyof IColors;
@@ -30,6 +34,10 @@ export interface IColorVariants {
       lightMountain: THexColor;
       darkMountain: THexColor;
       lens: THexColor;
+    };
+    languageSelect: {
+      water: THexColor;
+      earth: THexColor;
     };
   };
 }
@@ -58,6 +66,8 @@ export type TShadowStyles = "elevation" & ShadowStyleIOS;
 export interface IGlobalStyles {
   colors: IColorVariants;
   shadow: Pick<TStyle, TShadowStyles>;
+  buttonShadow: Pick<TStyle, TShadowStyles>;
 }
 
 export type NamedStyles = ViewStyle | TextStyle | ImageStyle;
+export type NamedStylesConjuntion = ViewStyle & TextStyle & ImageStyle;
