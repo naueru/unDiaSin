@@ -31,7 +31,7 @@ const computedStyles = createThemedStyle({
     paddingVertical: 4,
   },
   label: {
-    color: "secondary800",
+    color: "primaryText",
     fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
