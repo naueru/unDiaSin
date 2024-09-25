@@ -152,6 +152,7 @@ export default ThemeToggle;
 
 const styles = StyleSheet.create({
   container: {
+    ...GLOBAL_STYLES.shadow,
     backgroundColor: GLOBAL_STYLES.colors.common.themeToggle.darkSky,
     borderColor: GLOBAL_STYLES.colors.common.themeToggle.border,
     borderRadius: 50,
