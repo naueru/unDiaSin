@@ -2,8 +2,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useContext } from "react";
 import { Pressable, Text, View } from "react-native";
+
+// Context
+import { TranslationsContext } from "../store/language-context";
 
 // Hooks
 import { useColorTheme } from "../hooks/styles";
@@ -14,6 +17,7 @@ import Title from "./Title";
 // Utils
 import { getDaysDiff } from "../utils/date";
 import { createThemedStyle } from "../utils/styles";
+import { fillTranslation } from "../utils/translations";
 
 // Types
 import { TExpendable } from "../models/Expendables";
@@ -28,6 +32,7 @@ type TExpendableCardProps = {
 
 const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const { translation } = useContext(TranslationsContext);
 
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
@@ -42,15 +47,21 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
   const days: number = getDaysDiff(today, initialDate);
 
   const since: string =
-    days > 0
+    days < 0
+      ? fillTranslation(translation.YOU_WILL_START_SOON, {
+          days: Math.abs(days),
+        })
+      : days > 0
       ? days > 1
-        ? `${days} días!`
-        : `1 día!`
-      : "Diste el primer paso!";
+        ? fillTranslation(translation.ITS_BEEN_X_DAYS, { days })
+        : translation.ITS_BEEN_ONE_DAY
+      : translation.YOU_TOOK_THE_FISRT_STEP;
 
   const isSaving: boolean = !!(+cost && +timesPerDay);
 
-  const savedAmount: number = isSaving ? +cost * +timesPerDay * days : +cost;
+  const savedAmount: number = isSaving
+    ? Math.max(0, +cost * +timesPerDay * days)
+    : +cost;
 
   return (
     <Pressable
@@ -70,7 +81,10 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
             <Text style={styles.elapsed}>{since}</Text>
             {isSaving ? (
               <View style={styles.savingsWrapper}>
-                <Text style={styles.savings}>Ahorro ${savedAmount}!</Text>
+                <Text style={styles.savings}>
+                  {translation.SAVINGS} {translation.CURRENCY}
+                  {savedAmount}!
+                </Text>
               </View>
             ) : null}
           </View>
@@ -131,7 +145,7 @@ const computedStyles = createThemedStyle({
     width: "100%",
   },
   savings: {
-    color: "secondary800",
+    color: "primaryText",
     textAlign: "right",
   },
 });
