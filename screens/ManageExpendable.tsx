@@ -1,10 +1,11 @@
 // Core
 import { useIsFocused } from "@react-navigation/native";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useLayoutEffect } from "react";
 import { View } from "react-native";
 import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
 
 // Context
+import { TranslationsContext } from "../store/language-context";
 import {
   ExpendablesContext,
   IExpendablesContext,
@@ -31,6 +32,7 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
   route,
   navigation,
 }) => {
+  const { translation } = useContext(TranslationsContext);
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const isFocused = useIsFocused();
   const scheme = useColorTheme();
@@ -104,11 +106,19 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
     }
   }, [isFocused, isEditing]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditing
+        ? translation.EDIT_SCREEN_TITLE
+        : translation.ADD_SCREEN_TITLE,
+    });
+  });
+
   return (
     <View style={styles.container}>
       {isFocused ? (
         <ManageExpendableForm
-          label="Nuevo Veneno"
+          label={isEditing ? expendable?.name : translation.NEW_EXPENDABLE}
           onCancel={handleCancel}
           onSubmit={handleSubmit}
           defaultValues={defaultValues}
