@@ -2,10 +2,16 @@
 import { FC } from "react";
 import { ButtonProps, Pressable, Text, TextStyle, View } from "react-native";
 
-//
-import { createThemedStyle } from "../utils/styles";
+// Hooks
 import { useColorTheme } from "../hooks/styles";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
+
+// Constants
 import { NamedStyles } from "../models/styles";
+
+// Constants
 import { GLOBAL_STYLES } from "../constants/styles";
 
 export type TButton = {
