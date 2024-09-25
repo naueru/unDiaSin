@@ -36,6 +36,7 @@ export type TTranslation = {
   ERROR_MAX_CHARS: string;
   ERROR_NUMBER_START_END: string;
   ERROR_INVALID_YEAR: string;
+  ERROR_MUST_BE_POSITIVE_NUMBER: string;
 };
 
 export type TTranslations = {
