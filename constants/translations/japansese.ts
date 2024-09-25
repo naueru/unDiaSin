@@ -38,4 +38,5 @@ export const japanese: TTranslation = {
   ERROR_MAX_CHARS: "最大{{ max }}文字",
   ERROR_NUMBER_START_END: "番号 ({{ start }}~{{ end }})",
   ERROR_INVALID_YEAR: "無効な年",
+  ERROR_MUST_BE_POSITIVE_NUMBER: "正の数でなければなりません",
 };
