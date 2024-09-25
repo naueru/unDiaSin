@@ -1,4 +1,8 @@
+// Core
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, PropsWithChildren, useState } from "react";
+
+// Types
 import { TExpendable, TExpendables } from "../models/Expendables";
 
 export interface IExpendablesContext {
@@ -6,6 +10,7 @@ export interface IExpendablesContext {
   addExpendable: Function;
   updateExpendable: Function;
   deleteExpendable: Function;
+  setExpendables: Function;
 }
 
 export const ExpendablesContext = createContext<IExpendablesContext>({
@@ -13,6 +18,7 @@ export const ExpendablesContext = createContext<IExpendablesContext>({
   addExpendable: () => {},
   updateExpendable: () => {},
   deleteExpendable: () => {},
+  setExpendables: () => {},
 });
 
 const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
@@ -20,6 +26,10 @@ const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
 
   const addExpendable = (expendable: TExpendable) => {
     setExpendables((current) => [...current, expendable]);
+    AsyncStorage.setItem(
+      `expendable_${expendable.id}`,
+      JSON.stringify(expendable)
+    );
   };
 
   const updateExpendable = (id: string, payload: TExpendable) => {
@@ -27,12 +37,14 @@ const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
     newState[expendables.findIndex((expendable) => expendable.id === id)] =
       payload;
     setExpendables(() => newState);
+    AsyncStorage.setItem(`expendable_${payload.id}`, JSON.stringify(payload));
   };
 
   const deleteExpendable = (id: string) => {
     setExpendables(() =>
       expendables.filter((expendable) => expendable.id !== id)
     );
+    AsyncStorage.removeItem(`expendable_${id}`);
   };
 
   const value = {
@@ -40,6 +52,7 @@ const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
     addExpendable,
     updateExpendable,
     deleteExpendable,
+    setExpendables,
   };
 
   return (
