@@ -96,13 +96,13 @@ const computedStyles = createThemedStyle({
     alignItems: "center",
   },
   iconContainer: {
-    width: 50,
-    height: 50,
     alignItems: "center",
+    height: 50,
+    width: 50,
   },
   text: {
+    color: "accent500",
     fontSize: 8,
     textAlign: "center",
-    color: "accent500",
   },
 });
