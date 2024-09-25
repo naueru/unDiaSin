@@ -51,7 +51,6 @@ const computedStyles = createThemedStyle({
     backgroundColor: "primary200",
   },
   container: {
-    alignItems: "center",
     justifyContent: "center",
     padding: 16,
     flex: 1,
