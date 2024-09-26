@@ -9,8 +9,10 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { FC, useContext, useEffect } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
 import { Appearance, ColorSchemeName } from "react-native";
+import * as Notifications from "expo-notifications";
+import * as SplashScreen from "expo-splash-screen";
 
 // Context
 import TranslationsContextProvider, {
@@ -20,15 +22,19 @@ import ExpendablesContextProvider, {
   ExpendablesContext,
   IExpendablesContext,
 } from "./store/expendables-context";
-
-// Components
-import DummyDataButton from "./components/DummyDataButton";
+import ConfigurationContextProvider, {
+  ConfigurationContext,
+} from "./store/config-context";
 
 // Screens
 import ManageExpendable from "./screens/ManageExpendable";
 import AllExpendables from "./screens/AllExpendables";
 import ExpendableDetail from "./screens/ExpendableDetail";
 import Config from "./screens/Config";
+
+// Components
+import NotificationsHaddler from "./components/NotificationsHandler";
+import DummyDataButton from "./components/DummyDataButton";
 
 // Hooks
 import { useColorTheme } from "./hooks/styles";
@@ -42,8 +48,20 @@ import {
   ROUTES,
   STORAGE_KEY_EXPENDABLES,
   STORAGE_KEY_LANGUAGE,
+  STORAGE_KEY_NOTIFICATIONS,
   STORAGE_KEY_THEME,
 } from "./constants/constants";
+import { DEFAULT_LANGUAGE } from "./constants/defaults";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+      shouldShowAlert: true,
+    };
+  },
+});
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -86,26 +104,45 @@ const ExpendablesOverview: FC = () => {
 };
 
 const Root = () => {
+  const [loading, setLoading] = useState(true);
   const getTheme = useAsyncStorage(STORAGE_KEY_THEME);
   const languageAsyncStorage = useAsyncStorage(STORAGE_KEY_LANGUAGE);
+  const configAsyncStorage = useAsyncStorage(STORAGE_KEY_NOTIFICATIONS);
   const scheme = useColorTheme();
   const { chooseLanguage } = useContext(TranslationsContext);
+  const { setNotifications } = useContext(ConfigurationContext);
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
 
   useEffect(() => {
     async function fetchLanguage() {
-      const storedLanguage =
-        (await languageAsyncStorage.getItem()) as TTranslationsKeys;
+      const storedLanguage = ((await languageAsyncStorage.getItem()) ||
+        DEFAULT_LANGUAGE) as TTranslationsKeys;
       if (storedLanguage) {
         chooseLanguage(storedLanguage);
       }
     }
 
+    async function fetchConfig() {
+      let storedConfig;
+      let parsedConfig;
+      try {
+        storedConfig = (await configAsyncStorage.getItem()) || "";
+        parsedConfig = JSON.parse(storedConfig);
+        setNotifications(parsedConfig);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     async function fetchTheme() {
-      const storedTheme: ColorSchemeName =
-        (await getTheme.getItem()) as ColorSchemeName;
-      if (storedTheme) {
-        Appearance.setColorScheme(storedTheme);
+      let storedTheme: ColorSchemeName;
+      try {
+        storedTheme = (await getTheme.getItem()) as ColorSchemeName;
+        if (storedTheme) {
+          Appearance.setColorScheme(storedTheme);
+        }
+      } catch (err) {
+        console.error(err);
       }
     }
 
@@ -123,14 +160,29 @@ const Root = () => {
       expendablesCtx.setExpendables(parsedExpendables);
     }
 
-    fetchLanguage();
-    fetchTheme();
-    fetchExpendables();
+    Promise.all([
+      fetchConfig(),
+      fetchLanguage(),
+      fetchTheme(),
+      fetchExpendables(),
+    ]).finally(() => {
+      setLoading(false);
+    });
   }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (!loading) {
+      await SplashScreen.hideAsync();
+    }
+  }, [loading]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <BottomSheetModalProvider>
           <BottomTabs.Navigator
             screenOptions={{
@@ -164,7 +216,7 @@ const Root = () => {
               name={ROUTES.expendablesOverview}
               component={ExpendablesOverview}
               options={{
-                title: "Un día sin...",
+                title: "",
                 tabBarLabel: "",
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons name={"skull"} size={size} color={color} />
@@ -176,7 +228,7 @@ const Root = () => {
               name={ROUTES.manageExpendable}
               component={ManageExpendable}
               options={{
-                title: "Manejar venenos",
+                title: "",
                 tabBarLabel: "",
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons size={size} color={color} name={"add-circle"} />
@@ -195,9 +247,12 @@ export default function App() {
     <>
       <StatusBar style={"light"} />
       <TranslationsContextProvider>
-        <ExpendablesContextProvider>
-          <Root />
-        </ExpendablesContextProvider>
+        <ConfigurationContextProvider>
+          <ExpendablesContextProvider>
+            <NotificationsHaddler />
+            <Root />
+          </ExpendablesContextProvider>
+        </ConfigurationContextProvider>
       </TranslationsContextProvider>
     </>
   );
