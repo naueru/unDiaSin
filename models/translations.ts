@@ -2,6 +2,7 @@ export type TTranslation = {
   CONFIG_SCREEN_TITLE: string;
   CONFIG_THEME_TITLE: string;
   CONFIG_LANG_TITLE: string;
+  CONFIG_NOTIFICATIONS_TITLE: string;
   CONFIG_ICONS_TITLE: string;
   ALL_EXPENDABLES_TITLE: string;
   ALL_EXPENDABLES_EMPTY_LABEL: string;
@@ -37,6 +38,8 @@ export type TTranslation = {
   ERROR_NUMBER_START_END: string;
   ERROR_INVALID_YEAR: string;
   ERROR_MUST_BE_POSITIVE_NUMBER: string;
+  NOTIFICATION_DAILY_TITLE: string;
+  NOTIFICATION_DAILY_BODY: string;
 };
 
 export type TTranslations = {
