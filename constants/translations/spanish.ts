@@ -5,6 +5,7 @@ export const spanish: TTranslation = {
   CONFIG_THEME_TITLE: "Tema",
   CONFIG_LANG_TITLE: "Idioma",
   CONFIG_ICONS_TITLE: "Íconos",
+  CONFIG_NOTIFICATIONS_TITLE: "Notificaciones",
   ALL_EXPENDABLES_TITLE: "Un día sin...",
   ALL_EXPENDABLES_EMPTY_LABEL: "Todavía no tienes nada agregado",
   NEW_EXPENDABLE: "Nuevo vicio",
@@ -39,4 +40,6 @@ export const spanish: TTranslation = {
   ERROR_NUMBER_START_END: "Número ({{ start }}-{{ end }})",
   ERROR_INVALID_YEAR: "Año inválido",
   ERROR_MUST_BE_POSITIVE_NUMBER: "Debe ser número positivo",
+  NOTIFICATION_DAILY_TITLE: "Un día sin..",
+  NOTIFICATION_DAILY_BODY: "¿Lo conseguiste?",
 };
