@@ -11,13 +11,13 @@ import { DEFAULT_LANGUAGE } from "../constants/defaults";
 import { STORAGE_KEY_LANGUAGE } from "../constants/constants";
 
 export interface ITranslationContext {
-  language: string;
+  language: TTranslationsKeys;
   chooseLanguage: Function;
   translation: TTranslation;
 }
 
 export const TranslationsContext = createContext<ITranslationContext>({
-  language: "",
+  language: DEFAULT_LANGUAGE,
   chooseLanguage: () => {},
   translation: TRANSLATIONS.spanish,
 });
