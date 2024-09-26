@@ -4,6 +4,7 @@ export const japanese: TTranslation = {
   CONFIG_SCREEN_TITLE: "設定",
   CONFIG_THEME_TITLE: "テーマ",
   CONFIG_LANG_TITLE: "言語",
+  CONFIG_NOTIFICATIONS_TITLE: "通知",
   CONFIG_ICONS_TITLE: "アイコン",
   ALL_EXPENDABLES_TITLE: "何もないある日",
   ALL_EXPENDABLES_EMPTY_LABEL: "ここにはまだ何もありません",
@@ -39,4 +40,6 @@ export const japanese: TTranslation = {
   ERROR_NUMBER_START_END: "番号 ({{ start }}~{{ end }})",
   ERROR_INVALID_YEAR: "無効な年",
   ERROR_MUST_BE_POSITIVE_NUMBER: "正の数でなければなりません",
+  NOTIFICATION_DAILY_TITLE: "何もないある日",
+  NOTIFICATION_DAILY_BODY: "できましたか",
 };

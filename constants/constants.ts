@@ -27,5 +27,6 @@ export const DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 // Storage
 export const STORAGE_KEY_EXPENDABLES = "expendable_";
+export const STORAGE_KEY_NOTIFICATIONS = "notifications";
 export const STORAGE_KEY_LANGUAGE = "language";
 export const STORAGE_KEY_THEME = "theme";
