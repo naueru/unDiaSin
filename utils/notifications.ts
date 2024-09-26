@@ -11,7 +11,7 @@ import { DEFAULT_LANGUAGE } from "../constants/defaults";
 export const scheduleNotification = (
   language: TTranslationsKeys = DEFAULT_LANGUAGE
 ) => {
-  const trigger = new Date().setHours(2, 49, 0, 0);
+  const trigger = new Date().setHours(23, 50, 0, 0);
   Notifications.scheduleNotificationAsync({
     identifier: "daily",
     content: {
