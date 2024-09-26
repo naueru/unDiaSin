@@ -4,6 +4,7 @@ export const english: TTranslation = {
   CONFIG_SCREEN_TITLE: "Settings",
   CONFIG_THEME_TITLE: "Theme",
   CONFIG_LANG_TITLE: "Language",
+  CONFIG_NOTIFICATIONS_TITLE: "Notifications",
   CONFIG_ICONS_TITLE: "Icons",
   ALL_EXPENDABLES_TITLE: "One day without...",
   ALL_EXPENDABLES_EMPTY_LABEL: "There is nothing here yet",
@@ -39,4 +40,6 @@ export const english: TTranslation = {
   ERROR_NUMBER_START_END: "Number ({{ start }}-{{ end }})",
   ERROR_INVALID_YEAR: "Invalid year",
   ERROR_MUST_BE_POSITIVE_NUMBER: "Must be positive number",
+  NOTIFICATION_DAILY_TITLE: "One day without..",
+  NOTIFICATION_DAILY_BODY: "Did you make it?",
 };
