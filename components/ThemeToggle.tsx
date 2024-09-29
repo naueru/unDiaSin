@@ -3,6 +3,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { FC, PropsWithChildren, useEffect, useRef } from "react";
 import { Animated, Pressable, StyleSheet, View } from "react-native";
 
+// Components
+import Hero from "./Hero";
+import HeroColor from "./HeroColor";
+
 // Utils
 import { GLOBAL_STYLES } from "../constants/styles";
 
@@ -44,6 +48,20 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
   const sunFadeIn = Animated.timing(sunFadeAnim, lightAnimationConfig);
   const sunFadeOut = Animated.timing(sunFadeAnim, darkAnimationConfig);
 
+  const heroFadeAnim = useRef(new Animated.Value(0)).current;
+  const heroFadeIn = Animated.timing(heroFadeAnim, lightAnimationConfig);
+  const heroFadeOut = Animated.timing(heroFadeAnim, darkAnimationConfig);
+
+  const heroNightFadeAnim = useRef(new Animated.Value(0)).current;
+  const heroNightFadeIn = Animated.timing(
+    heroNightFadeAnim,
+    lightAnimationConfig
+  );
+  const heroNightFadeOut = Animated.timing(
+    heroNightFadeAnim,
+    darkAnimationConfig
+  );
+
   const mountainAnim = useRef(new Animated.Value(0)).current;
   const mountainMoveRight = Animated.timing(mountainAnim, lightAnimationConfig);
   const mountainMoveLeft = Animated.timing(mountainAnim, darkAnimationConfig);
@@ -74,6 +92,8 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
     mountainMoveRight,
     cloudMoveRight,
     starsFadeIn,
+    heroFadeIn,
+    heroNightFadeOut,
   ]);
 
   const lightToDarkAnimations = Animated.parallel([
@@ -83,6 +103,8 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
     mountainMoveLeft,
     cloudMoveLeft,
     starsFadeOut,
+    heroFadeOut,
+    heroNightFadeIn,
   ]);
 
   const handlePress = () => onChange(!value);
@@ -97,6 +119,7 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
 
   return (
     <Pressable onPress={handlePress}>
+      <View></View>
       <View style={styles.container}>
         <Animated.View style={[{ opacity: sunFadeAnim }]}>
           <View style={styles.lightSky} />
@@ -129,6 +152,16 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
           </View>
         </Animated.View>
         <Animated.View style={{ transform: [{ translateX: cloudXVal }] }}>
+          <Animated.View style={[{ opacity: heroFadeAnim }]}>
+            <View style={[styles.hero]}>
+              <HeroColor width="25" />
+            </View>
+          </Animated.View>
+          <Animated.View style={[{ opacity: heroNightFadeAnim }]}>
+            <View style={[styles.heroNight]}>
+              <Hero width="30" />
+            </View>
+          </Animated.View>
           <View style={styles.cloud}>
             <Ionicons name="cloud" size={30} color={cloud} />
           </View>
@@ -179,6 +212,14 @@ const styles = StyleSheet.create({
   },
   moon: {
     transform: [{ translateX: 40 }],
+    position: "absolute",
+  },
+  hero: {
+    transform: [{ translateX: 80 }, { translateY: 50 }],
+    position: "absolute",
+  },
+  heroNight: {
+    transform: [{ translateX: 80 }, { translateY: 50 }],
     position: "absolute",
   },
   backMountain: {
