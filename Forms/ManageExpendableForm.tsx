@@ -303,15 +303,13 @@ export default ManageExpendableForm;
 
 const computedStyles = createThemedStyle({
   outerContainer: {
-    flex: 1,
     maxWidth: 600,
     width: "100%",
   },
   innerContainer: {
-    flex: 1,
     gap: 20,
     paddingHorizontal: 32,
-    paddingVertical: 100,
+    paddingVertical: 50,
     width: "100%",
   },
   buttonGroup: {
