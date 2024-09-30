@@ -16,6 +16,7 @@ import {
 
 // Components
 import PressableIcon from "../components/PressableIcon";
+import PanNavigator from "../components/PanNavigator";
 import Title from "../components/Title";
 import Frame from "../components/Frame";
 
@@ -126,63 +127,65 @@ const ExpendableDetail: FC<NativeStackNavigatorProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.iconWrapper}>
-        <Ionicons
-          name={icon}
-          size={80}
-          color={GLOBAL_STYLES.colors[scheme].accent500}
-        />
-      </View>
+    <PanNavigator>
+      <View style={styles.container}>
+        <View style={styles.iconWrapper}>
+          <Ionicons
+            name={icon}
+            size={80}
+            color={GLOBAL_STYLES.colors[scheme].accent500}
+          />
+        </View>
 
-      <Title label={name} />
-      <Frame label={translation.DATE} style={styles.detailContainer}>
-        <Text style={styles.detail}>
-          {translation.START_DATE}:{" "}
-          {fillTranslation(translation.FORMATTED_DATE, {
-            day: initDay,
-            month: initMonth,
-            year: initYear,
-          })}
-        </Text>
-        <Text style={styles.achievement}>{since}</Text>
-      </Frame>
-      {isSaving ? (
-        <Frame label={translation.SAVINGS} style={styles.detailContainer}>
+        <Title label={name} />
+        <Frame label={translation.DATE} style={styles.detailContainer}>
           <Text style={styles.detail}>
-            {translation.COST}: {translation.CURRENCY}
-            {cost}
+            {translation.START_DATE}:{" "}
+            {fillTranslation(translation.FORMATTED_DATE, {
+              day: initDay,
+              month: initMonth,
+              year: initYear,
+            })}
           </Text>
-          <Text style={styles.detail}>
-            {translation.QUANTITY_PER_DAY}: {timesPerDay}
-          </Text>
-          <Text style={styles.achievement}>
-            {translation.YOU_HAVE_SAVED} {translation.CURRENCY}
-            {savedAmount}!
-          </Text>
+          <Text style={styles.achievement}>{since}</Text>
         </Frame>
-      ) : null}
-      <View style={styles.actions}>
-        <PressableIcon
-          name="reload"
-          label={translation.RESTART}
-          size={40}
-          onPress={handleRestart}
-        />
-        <PressableIcon
-          name="pencil"
-          label={translation.EDIT}
-          size={40}
-          onPress={handleEdit}
-        />
-        <PressableIcon
-          name="trash"
-          label={translation.REMOVE}
-          size={40}
-          onPress={handleDelete}
-        />
+        {isSaving ? (
+          <Frame label={translation.SAVINGS} style={styles.detailContainer}>
+            <Text style={styles.detail}>
+              {translation.COST}: {translation.CURRENCY}
+              {cost}
+            </Text>
+            <Text style={styles.detail}>
+              {translation.QUANTITY_PER_DAY}: {timesPerDay}
+            </Text>
+            <Text style={styles.achievement}>
+              {translation.YOU_HAVE_SAVED} {translation.CURRENCY}
+              {savedAmount}!
+            </Text>
+          </Frame>
+        ) : null}
+        <View style={styles.actions}>
+          <PressableIcon
+            name="reload"
+            label={translation.RESTART}
+            size={40}
+            onPress={handleRestart}
+          />
+          <PressableIcon
+            name="pencil"
+            label={translation.EDIT}
+            size={40}
+            onPress={handleEdit}
+          />
+          <PressableIcon
+            name="trash"
+            label={translation.REMOVE}
+            size={40}
+            onPress={handleDelete}
+          />
+        </View>
       </View>
-    </View>
+    </PanNavigator>
   );
 };
 
