@@ -16,6 +16,7 @@ import {
 
 // Components
 import ExpendableCard from "../components/ExpendableCard";
+import PanNavigator from "../components/PanNavigator";
 import Button from "../components/Button";
 import Title from "../components/Title";
 
@@ -55,7 +56,11 @@ const AllExpendables: FC = () => {
     </View>
   );
 
-  return <View style={styles.outerContainer}>{content}</View>;
+  return (
+    <PanNavigator>
+      <View style={styles.outerContainer}>{content}</View>
+    </PanNavigator>
+  );
 };
 
 export default AllExpendables;
