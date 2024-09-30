@@ -9,6 +9,31 @@ export const ROUTES = {
   expendableDetail: "ExpendableDetail",
 };
 
+export const ROUTE_DESTINATIONS: {
+  [key: string]: { left: string | null; right: string | null };
+} = {
+  Expendables: {
+    left: ROUTES.config,
+    right: ROUTES.manageExpendable,
+  },
+  ManageExpendable: {
+    left: ROUTES.expendablesOverview,
+    right: null,
+  },
+  Config: {
+    left: null,
+    right: ROUTES.expendables,
+  },
+  ExpendablesOverview: {
+    left: ROUTES.config,
+    right: ROUTES.manageExpendable,
+  },
+  ExpendableDetail: {
+    left: ROUTES.expendables,
+    right: ROUTES.manageExpendable,
+  },
+};
+
 export const MILLS_PER_SEC = 1000;
 export const SEC_PER_MIN = 60;
 export const MIN_PER_HOUR = 60;
