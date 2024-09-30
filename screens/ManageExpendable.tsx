@@ -18,6 +18,7 @@ import { useColorTheme } from "../hooks/styles";
 import ManageExpendableForm, {
   IFormInputs,
 } from "../Forms/ManageExpendableForm";
+import PanNavigator from "../components/PanNavigator";
 
 // Utils
 import { createThemedStyle } from "../utils/styles";
@@ -93,11 +94,11 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
     } else {
       expendablesCtx.addExpendable(values);
     }
-    navigation.navigate(ROUTES.expendables);
+    navigation.navigate(ROUTES.expendablesOverview);
   };
 
   const handleCancel = () => {
-    navigation.navigate(ROUTES.expendables);
+    navigation.navigate(ROUTES.expendablesOverview);
   };
 
   useEffect(() => {
@@ -115,16 +116,20 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
   });
 
   return (
-    <View style={styles.container}>
-      {isFocused ? (
-        <ManageExpendableForm
-          label={isEditing ? expendable?.name : translation.NEW_EXPENDABLE}
-          onCancel={handleCancel}
-          onSubmit={handleSubmit}
-          defaultValues={defaultValues}
-        />
-      ) : null}
-    </View>
+    <PanNavigator>
+      <View style={styles.container}>
+        {isFocused ? (
+          <View>
+            <ManageExpendableForm
+              label={isEditing ? expendable?.name : translation.NEW_EXPENDABLE}
+              onCancel={handleCancel}
+              onSubmit={handleSubmit}
+              defaultValues={defaultValues}
+            />
+          </View>
+        ) : null}
+      </View>
+    </PanNavigator>
   );
 };
 
@@ -132,7 +137,6 @@ export default ManageExpendable;
 
 const computedStyles = createThemedStyle({
   container: {
-    alignItems: "center",
     backgroundColor: "primary500",
     flex: 1,
     justifyContent: "center",
