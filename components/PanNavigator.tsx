@@ -57,6 +57,11 @@ const toLeftConfigInstant = {
   useNativeDriver: true,
 };
 
+const DIRECTIONS = {
+  LEFT: "left",
+  RIGHT: "right",
+};
+
 type PanNavigatorProps = FC<PropsWithChildren & { gesture: PanGesture }>;
 
 const PanNavigatorWrapper: PanNavigatorProps = ({ children, gesture }) => {
@@ -84,7 +89,8 @@ const PanNavigator: FC<
     if (destination) {
       navigation.navigate(destination, {
         ...params,
-        from: direction === "left" ? "right" : "left",
+        from:
+          direction === DIRECTIONS.LEFT ? DIRECTIONS.RIGHT : DIRECTIONS.LEFT,
       });
     }
   });
@@ -109,13 +115,13 @@ const PanNavigator: FC<
 
   useEffect(() => {
     const from = route?.params?.from || b;
-    if (isFocused && from === "right") {
+    if (isFocused && from === DIRECTIONS.RIGHT) {
       screenToLeftInstant.start(() => screenToMid.start());
-    } else if (isFocused && from === "left") {
+    } else if (isFocused && from === DIRECTIONS.LEFT) {
       screenToRightInstant.start(() => screenToMid.start());
-    } else if (!isFocused && from === "right") {
+    } else if (!isFocused && from === DIRECTIONS.RIGHT) {
       screenToRightInstant.start();
-    } else if (!isFocused && from === "left") {
+    } else if (!isFocused && from === DIRECTIONS.LEFT) {
       screenToLeftInstant.start();
     } else {
       screenToMidInstant.start();
@@ -127,9 +133,9 @@ const PanNavigator: FC<
     .minDistance(200)
     .onEnd((e) => {
       if (e.translationX > 1) {
-        navigateTo("left");
+        navigateTo(DIRECTIONS.LEFT);
       } else {
-        navigateTo("right");
+        navigateTo(DIRECTIONS.RIGHT);
       }
     });
 
