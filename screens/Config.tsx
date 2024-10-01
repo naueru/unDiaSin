@@ -31,6 +31,7 @@ import { TIcons } from "../models/Icons";
 import { STORAGE_KEY_THEME } from "../constants/constants";
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
+import DevOnly from "../components/DevOnly";
 
 const Config: FC = () => {
   const { translation, chooseLanguage, language } =
@@ -67,35 +68,37 @@ const Config: FC = () => {
             }}
             defaultValue={configCtx.notifications}
           />
-
-          <Title label={translation.CONFIG_ICONS_TITLE} />
-          <PressableIcon
-            name="images"
-            onPress={() => sheetRef.current?.present()}
-            size={60}
-          />
-
-          <BSModal ref={sheetRef}>
-            <BottomSheetFlatList
-              contentContainerStyle={styles.iconsContentContainer}
-              data={ICONS_SORTED.filter(
-                (item: TIcons) =>
-                  item.indexOf("sharp") === -1 && item.indexOf("outline") === -1
-              )}
-              renderItem={({ item }: { item: TIcons }) => (
-                <View style={styles.iconContainer}>
-                  <Ionicons
-                    name={item}
-                    size={30}
-                    color={GLOBAL_STYLES.colors[scheme].accent500}
-                  />
-                  <Text style={styles.text}>{item}</Text>
-                </View>
-              )}
-              keyExtractor={(item) => "icon_conf_" + item}
-              numColumns={8}
+          <DevOnly>
+            <Title label={translation.CONFIG_ICONS_TITLE} />
+            <PressableIcon
+              name="images"
+              onPress={() => sheetRef.current?.present()}
+              size={60}
             />
-          </BSModal>
+
+            <BSModal ref={sheetRef}>
+              <BottomSheetFlatList
+                contentContainerStyle={styles.iconsContentContainer}
+                data={ICONS_SORTED.filter(
+                  (item: TIcons) =>
+                    item.indexOf("sharp") === -1 &&
+                    item.indexOf("outline") === -1
+                )}
+                renderItem={({ item }: { item: TIcons }) => (
+                  <View style={styles.iconContainer}>
+                    <Ionicons
+                      name={item}
+                      size={30}
+                      color={GLOBAL_STYLES.colors[scheme].accent500}
+                    />
+                    <Text style={styles.text}>{item}</Text>
+                  </View>
+                )}
+                keyExtractor={(item) => "icon_conf_" + item}
+                numColumns={8}
+              />
+            </BSModal>
+          </DevOnly>
         </ScrollView>
       </View>
     </PanNavigator>
