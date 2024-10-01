@@ -116,7 +116,7 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
   });
 
   return (
-    <PanNavigator>
+    <PanNavigator initialAnimationValue={2}>
       <View style={styles.container}>
         {isFocused ? (
           <View>
