@@ -65,10 +65,15 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate(ROUTES.expendableDetail, { id })}
+      onPress={() =>
+        navigation.navigate(ROUTES.expendablesOverview, {
+          screen: ROUTES.expendableDetail,
+          params: { id },
+        })
+      }
     >
       <View style={styles.container}>
-        <View style={styles.iconontainer}>
+        <View style={styles.iconContainer}>
           <Ionicons
             name={icon}
             size={60}
@@ -89,7 +94,7 @@ const ExpendableCard: FC<TExpendableCardProps> = ({ expendable }) => {
             ) : null}
           </View>
         </View>
-        <View style={styles.iconontainer}>
+        <View style={styles.chevronContainer}>
           <Ionicons
             name="chevron-forward"
             size={40}
@@ -117,8 +122,11 @@ const computedStyles = createThemedStyle({
     padding: 16,
     width: "100%",
   },
-  iconontainer: {
-    backgroundColor: "primary500",
+  iconContainer: {
+    minWidth: 60,
+  },
+  chevronContainer: {
+    minWidth: 40,
   },
   contentContainer: {
     alignItems: "flex-start",
