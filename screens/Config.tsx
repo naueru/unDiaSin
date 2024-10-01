@@ -42,7 +42,7 @@ const Config: FC = () => {
   const isDark = scheme === "dark";
   const sheetRef = useRef<BottomSheetModal>(null);
   return (
-    <PanNavigator>
+    <PanNavigator initialAnimationValue={0}>
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <Title label={translation.CONFIG_THEME_TITLE} />
