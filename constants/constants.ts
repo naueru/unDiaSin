@@ -9,28 +9,49 @@ export const ROUTES = {
   expendableDetail: "ExpendableDetail",
 };
 
-export const ROUTE_DESTINATIONS: {
-  [key: string]: { left: string | null; right: string | null };
-} = {
+type TROUTE_DESTINATION = {
+  route: string | null;
+  params: {
+    [key: string]: string | number;
+  };
+};
+
+type TROUTE_DESTINATION_PAIR = {
+  left: TROUTE_DESTINATION;
+  right: TROUTE_DESTINATION;
+};
+
+type TROUTE_DESTINATIONS = { [key: string]: TROUTE_DESTINATION_PAIR };
+
+export const ROUTE_DESTINATIONS: TROUTE_DESTINATIONS = {
   Expendables: {
-    left: ROUTES.config,
-    right: ROUTES.manageExpendable,
+    left: { route: ROUTES.config, params: {} },
+    right: { route: ROUTES.manageExpendable, params: {} },
   },
   ManageExpendable: {
-    left: ROUTES.expendablesOverview,
-    right: null,
+    left: {
+      route: ROUTES.expendablesOverview,
+      params: {},
+    },
+    right: { route: null, params: {} },
   },
   Config: {
-    left: null,
-    right: ROUTES.expendables,
+    left: { route: null, params: {} },
+    right: { route: ROUTES.expendablesOverview, params: {} },
   },
   ExpendablesOverview: {
-    left: ROUTES.config,
-    right: ROUTES.manageExpendable,
+    left: { route: ROUTES.config, params: {} },
+    right: { route: ROUTES.manageExpendable, params: {} },
   },
   ExpendableDetail: {
-    left: ROUTES.expendables,
-    right: ROUTES.manageExpendable,
+    left: {
+      route: ROUTES.expendablesOverview,
+      params: { screen: ROUTES.expendables },
+    },
+    right: {
+      route: ROUTES.manageExpendable,
+      params: {},
+    },
   },
 };
 
