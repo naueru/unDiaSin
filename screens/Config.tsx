@@ -10,11 +10,12 @@ import { useColorTheme } from "../hooks/styles";
 
 // Components
 import PressableIcon from "../components/PressableIcon";
-import ThemeToggle from "../components/ThemeToggle";
 import LanguageSelect from "../components/LanguageSelect";
+import PanNavigator from "../components/PanNavigator";
+import ThemeToggle from "../components/ThemeToggle";
 import BSModal from "../components/BSModal";
-import Title from "../components/Title";
 import Toggle from "../components/Toggle";
+import Title from "../components/Title";
 
 // Context
 import { TranslationsContext } from "../store/language-context";
@@ -41,61 +42,63 @@ const Config: FC = () => {
   const isDark = scheme === "dark";
   const sheetRef = useRef<BottomSheetModal>(null);
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Title label={translation.CONFIG_THEME_TITLE} />
-        <ThemeToggle
-          onChange={(value: boolean) => {
-            Appearance.setColorScheme(value ? "dark" : "light");
-            themeStorage.setItem(value ? "dark" : "light");
-          }}
-          value={isDark}
-        />
-
-        <Title label={translation.CONFIG_LANG_TITLE} />
-        <LanguageSelect
-          defaultValue={language}
-          onSelect={(value: string) => chooseLanguage(value)}
-        />
-
-        <Toggle
-          label={translation.CONFIG_NOTIFICATIONS_TITLE}
-          onChange={(value: boolean) => {
-            configCtx.setNotifications(value);
-          }}
-          defaultValue={configCtx.notifications}
-        />
-
-        <Title label={translation.CONFIG_ICONS_TITLE} />
-        <PressableIcon
-          name="images"
-          onPress={() => sheetRef.current?.present()}
-          size={60}
-        />
-
-        <BSModal ref={sheetRef}>
-          <BottomSheetFlatList
-            contentContainerStyle={styles.iconsContentContainer}
-            data={ICONS_SORTED.filter(
-              (item: TIcons) =>
-                item.indexOf("sharp") === -1 && item.indexOf("outline") === -1
-            )}
-            renderItem={({ item }: { item: TIcons }) => (
-              <View style={styles.iconContainer}>
-                <Ionicons
-                  name={item}
-                  size={30}
-                  color={GLOBAL_STYLES.colors[scheme].accent500}
-                />
-                <Text style={styles.text}>{item}</Text>
-              </View>
-            )}
-            keyExtractor={(item) => "icon_conf_" + item}
-            numColumns={8}
+    <PanNavigator initialAnimationValue={0}>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <Title label={translation.CONFIG_THEME_TITLE} />
+          <ThemeToggle
+            onChange={(value: boolean) => {
+              Appearance.setColorScheme(value ? "dark" : "light");
+              themeStorage.setItem(value ? "dark" : "light");
+            }}
+            value={isDark}
           />
-        </BSModal>
-      </ScrollView>
-    </View>
+
+          <Title label={translation.CONFIG_LANG_TITLE} />
+          <LanguageSelect
+            defaultValue={language}
+            onSelect={(value: string) => chooseLanguage(value)}
+          />
+
+          <Toggle
+            label={translation.CONFIG_NOTIFICATIONS_TITLE}
+            onChange={(value: boolean) => {
+              configCtx.setNotifications(value);
+            }}
+            defaultValue={configCtx.notifications}
+          />
+
+          <Title label={translation.CONFIG_ICONS_TITLE} />
+          <PressableIcon
+            name="images"
+            onPress={() => sheetRef.current?.present()}
+            size={60}
+          />
+
+          <BSModal ref={sheetRef}>
+            <BottomSheetFlatList
+              contentContainerStyle={styles.iconsContentContainer}
+              data={ICONS_SORTED.filter(
+                (item: TIcons) =>
+                  item.indexOf("sharp") === -1 && item.indexOf("outline") === -1
+              )}
+              renderItem={({ item }: { item: TIcons }) => (
+                <View style={styles.iconContainer}>
+                  <Ionicons
+                    name={item}
+                    size={30}
+                    color={GLOBAL_STYLES.colors[scheme].accent500}
+                  />
+                  <Text style={styles.text}>{item}</Text>
+                </View>
+              )}
+              keyExtractor={(item) => "icon_conf_" + item}
+              numColumns={8}
+            />
+          </BSModal>
+        </ScrollView>
+      </View>
+    </PanNavigator>
   );
 };
 

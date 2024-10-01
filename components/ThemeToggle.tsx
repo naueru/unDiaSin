@@ -119,7 +119,6 @@ const ThemeToggle: FC<TThemeToggle> = ({ onChange, value }) => {
 
   return (
     <Pressable onPress={handlePress}>
-      <View></View>
       <View style={styles.container}>
         <Animated.View style={[{ opacity: sunFadeAnim }]}>
           <View style={styles.lightSky} />
