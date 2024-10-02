@@ -1,8 +1,9 @@
 // Core
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { FC, useContext } from "react";
-import { FlatList, View } from "react-native";
+import { FC, useContext, useLayoutEffect, useRef } from "react";
+import { Alert, FlatList, View } from "react-native";
 
 // Hooks
 import { useColorTheme } from "../hooks/styles";
@@ -15,8 +16,11 @@ import {
 } from "../store/expendables-context";
 
 // Components
+import ActionItem, { TActionItemProps } from "../components/ActionItem";
 import ExpendableCard from "../components/ExpendableCard";
+import PressableIcon from "../components/PressableIcon";
 import PanNavigator from "../components/PanNavigator";
+import BSModal from "../components/BSModal";
 import Button from "../components/Button";
 import Title from "../components/Title";
 
@@ -30,16 +34,28 @@ const AllExpendables: FC = () => {
   const { translation } = useContext(TranslationsContext);
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
-  const ExpendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
+  const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const hasExpendables = ExpendablesCtx.expendables.length > 0;
+  const sheetRef = useRef<BottomSheetModal>(null);
+
+  const hasExpendables = expendablesCtx.expendables.length > 0;
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PressableIcon
+          name="ellipsis-vertical"
+          onPress={() => sheetRef.current?.present()}
+        />
+      ),
+    });
+  });
 
   const content = hasExpendables ? (
     <View>
       <FlatList
         contentContainerStyle={styles.contentContainer}
-        data={ExpendablesCtx.expendables}
+        data={expendablesCtx.expendables}
         renderItem={({ item }) => <ExpendableCard expendable={item} />}
         keyExtractor={(item) => `expendable_${item.id}`}
       />
@@ -59,6 +75,58 @@ const AllExpendables: FC = () => {
   return (
     <PanNavigator>
       <View style={styles.outerContainer}>{content}</View>
+      <BSModal ref={sheetRef}>
+        <BottomSheetFlatList
+          contentContainerStyle={styles.actionsContentContainer}
+          data={[
+            {
+              label: translation.DELETE_ALL_EXPENDABLES,
+              onPress: () => {
+                Alert.alert(
+                  translation.ARE_YOU_SURE,
+                  translation.REMOVE_DESCRIPTION,
+                  [
+                    { text: translation.CANCEL, style: "cancel" },
+                    {
+                      text: translation.REMOVE,
+                      style: "destructive",
+                      onPress: () => {
+                        expendablesCtx.deleteAllExpendables();
+                        navigation.navigate(ROUTES.expendables);
+                      },
+                    },
+                  ],
+                  { cancelable: true }
+                );
+                sheetRef.current?.dismiss();
+              },
+              icon: "trash",
+            },
+            {
+              label: translation.ADD_DUMMY_DATA,
+              onPress: () => {
+                expendablesCtx.addExpendable({
+                  id: Date.now().toString(),
+                  name: "Monster",
+                  initDay: "13",
+                  initMonth: "9",
+                  initYear: "2024",
+                  icon: "skull",
+                  cost: "2000",
+                  timesPerDay: "2",
+                });
+                sheetRef.current?.dismiss();
+              },
+              icon: "list",
+              isDev: true,
+            },
+          ]}
+          renderItem={({ item }: { item: TActionItemProps }) => (
+            <ActionItem {...item} />
+          )}
+          keyExtractor={(item) => "all_expendables_action_" + item.label}
+        />
+      </BSModal>
     </PanNavigator>
   );
 };
@@ -79,5 +147,8 @@ const computedStyles = createThemedStyle({
     alignItems: "center",
     backgroundColor: "primary500",
     gap: 32,
+  },
+  actionsContentContainer: {
+    padding: 12,
   },
 });

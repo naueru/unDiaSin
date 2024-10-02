@@ -13,6 +13,7 @@ export interface IExpendablesContext {
   addExpendable: Function;
   updateExpendable: Function;
   deleteExpendable: Function;
+  deleteAllExpendables: Function;
   setExpendables: Function;
 }
 
@@ -21,6 +22,7 @@ export const ExpendablesContext = createContext<IExpendablesContext>({
   addExpendable: () => {},
   updateExpendable: () => {},
   deleteExpendable: () => {},
+  deleteAllExpendables: () => {},
   setExpendables: () => {},
 });
 
@@ -53,11 +55,20 @@ const ExpendablesContextProvider = ({ children }: PropsWithChildren) => {
     AsyncStorage.removeItem(STORAGE_KEY_EXPENDABLES + id);
   };
 
+  const deleteAllExpendables = () => {
+    const list = expendables.map(
+      (expendable: TExpendable) => STORAGE_KEY_EXPENDABLES + expendable.id
+    );
+    setExpendables(() => []);
+    AsyncStorage.multiRemove(list);
+  };
+
   const value = {
     expendables: expendables,
     addExpendable,
     updateExpendable,
     deleteExpendable,
+    deleteAllExpendables,
     setExpendables,
   };
 

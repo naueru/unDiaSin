@@ -42,4 +42,6 @@ export const japanese: TTranslation = {
   ERROR_MUST_BE_POSITIVE_NUMBER: "正の数でなければなりません",
   NOTIFICATION_DAILY_TITLE: "何もないある日",
   NOTIFICATION_DAILY_BODY: "できましたか",
+  DELETE_ALL_EXPENDABLES: "すべての項目を削除する",
+  ADD_DUMMY_DATA: "ダミーデータを追加する",
 };
