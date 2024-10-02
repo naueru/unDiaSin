@@ -40,6 +40,8 @@ export type TTranslation = {
   ERROR_MUST_BE_POSITIVE_NUMBER: string;
   NOTIFICATION_DAILY_TITLE: string;
   NOTIFICATION_DAILY_BODY: string;
+  DELETE_ALL_EXPENDABLES: string;
+  ADD_DUMMY_DATA: string;
 };
 
 export type TTranslations = {
