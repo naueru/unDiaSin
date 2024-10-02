@@ -14,6 +14,7 @@ import LanguageSelect from "../components/LanguageSelect";
 import PanNavigator from "../components/PanNavigator";
 import ThemeToggle from "../components/ThemeToggle";
 import BSModal from "../components/BSModal";
+import DevOnly from "../components/DevOnly";
 import Toggle from "../components/Toggle";
 import Title from "../components/Title";
 
@@ -31,7 +32,6 @@ import { TIcons } from "../models/Icons";
 import { STORAGE_KEY_THEME } from "../constants/constants";
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
-import DevOnly from "../components/DevOnly";
 
 const Config: FC = () => {
   const { translation, chooseLanguage, language } =
