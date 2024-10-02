@@ -42,4 +42,6 @@ export const english: TTranslation = {
   ERROR_MUST_BE_POSITIVE_NUMBER: "Must be positive number",
   NOTIFICATION_DAILY_TITLE: "One day without..",
   NOTIFICATION_DAILY_BODY: "Did you make it?",
+  DELETE_ALL_EXPENDABLES: "Delete all items",
+  ADD_DUMMY_DATA: "Add dummy data",
 };
