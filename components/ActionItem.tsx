@@ -1,10 +1,21 @@
+// Core
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, Text } from "react-native";
-import DevOnly from "./DevOnly";
-import { TIcons } from "../models/Icons";
 import { FC } from "react";
-import { createThemedStyle } from "../utils/styles";
+
+// Hooks
 import { useColorTheme } from "../hooks/styles";
+
+// Components
+import DevOnly from "./DevOnly";
+
+// Utils
+import { createThemedStyle } from "../utils/styles";
+
+// Types
+import { TIcons } from "../models/Icons";
+
+// Constants
 import { GLOBAL_STYLES } from "../constants/styles";
 
 export type TActionItemProps = {

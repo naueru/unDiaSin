@@ -110,7 +110,8 @@ const Root = () => {
   const configAsyncStorage = useAsyncStorage(STORAGE_KEY_NOTIFICATIONS);
   const scheme = useColorTheme();
   const { chooseLanguage } = useContext(TranslationsContext);
-  const { setNotifications } = useContext(ConfigurationContext);
+  const { setNotifications, setNotificationsTime } =
+    useContext(ConfigurationContext);
   const expendablesCtx = useContext<IExpendablesContext>(ExpendablesContext);
 
   useEffect(() => {
@@ -128,7 +129,8 @@ const Root = () => {
       try {
         storedConfig = (await configAsyncStorage.getItem()) || "";
         parsedConfig = JSON.parse(storedConfig);
-        setNotifications(parsedConfig);
+        setNotifications(parsedConfig.notifications);
+        setNotificationsTime(parsedConfig.notificationsTime);
       } catch (err) {
         console.error(err);
       }

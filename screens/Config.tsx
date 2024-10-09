@@ -1,26 +1,28 @@
 // Core
 import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { Ionicons } from "@expo/vector-icons";
 import { Appearance, ScrollView, Text, View } from "react-native";
 import { FC, useContext, useRef } from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 // Hooks
 import { useColorTheme } from "../hooks/styles";
 
 // Components
-import PressableIcon from "../components/PressableIcon";
 import LanguageSelect from "../components/LanguageSelect";
+import PressableIcon from "../components/PressableIcon";
 import PanNavigator from "../components/PanNavigator";
 import ThemeToggle from "../components/ThemeToggle";
+import TimePicker from "../components/TimePicker";
 import BSModal from "../components/BSModal";
 import DevOnly from "../components/DevOnly";
 import Toggle from "../components/Toggle";
 import Title from "../components/Title";
+import Frame from "../components/Frame";
 
 // Context
+import { ConfigurationContext, TTimeObject } from "../store/config-context";
 import { TranslationsContext } from "../store/language-context";
-import { ConfigurationContext } from "../store/config-context";
 
 // Utils
 import { createThemedStyle } from "../utils/styles";
@@ -37,15 +39,29 @@ const Config: FC = () => {
   const { translation, chooseLanguage, language } =
     useContext(TranslationsContext);
   const configCtx = useContext(ConfigurationContext);
+
   const themeStorage = useAsyncStorage(STORAGE_KEY_THEME);
   const scheme = useColorTheme();
   const styles = computedStyles[scheme];
   const isDark = scheme === "dark";
   const sheetRef = useRef<BottomSheetModal>(null);
+  const containerRef = useRef<ScrollView>(null);
+
+  const pauseScroll = () => {
+    containerRef.current?.setNativeProps({ scrollEnabled: false });
+  };
+  const resumeScroll = () => {
+    containerRef.current?.setNativeProps({ scrollEnabled: true });
+  };
+
   return (
     <PanNavigator initialAnimationValue={0}>
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.contentContainer}>
+        <ScrollView
+          ref={containerRef}
+          contentContainerStyle={styles.contentContainer}
+          scrollEnabled={true}
+        >
           <Title label={translation.CONFIG_THEME_TITLE} />
           <ThemeToggle
             onChange={(value: boolean) => {
@@ -60,14 +76,27 @@ const Config: FC = () => {
             defaultValue={language}
             onSelect={(value: string) => chooseLanguage(value)}
           />
+          <Frame style={styles.notificationsFrame}>
+            <Toggle
+              label={translation.CONFIG_NOTIFICATIONS_TITLE}
+              onChange={(value: boolean) => {
+                configCtx.setNotifications(value);
+              }}
+              defaultValue={configCtx.notifications}
+            />
+            {configCtx.notifications ? (
+              <TimePicker
+                onScroll={pauseScroll}
+                onStop={resumeScroll}
+                defaultValues={configCtx.notificationsTime}
+                onChange={(_: string, values: TTimeObject) =>
+                  configCtx.setNotificationsTime(values)
+                }
+                name="notificationsTime"
+              />
+            ) : null}
+          </Frame>
 
-          <Toggle
-            label={translation.CONFIG_NOTIFICATIONS_TITLE}
-            onChange={(value: boolean) => {
-              configCtx.setNotifications(value);
-            }}
-            defaultValue={configCtx.notifications}
-          />
           <DevOnly>
             <Title label={translation.CONFIG_ICONS_TITLE} />
             <PressableIcon
@@ -130,5 +159,8 @@ const computedStyles = createThemedStyle({
     color: "accent500",
     fontSize: 8,
     textAlign: "center",
+  },
+  notificationsFrame: {
+    gap: 16,
   },
 });

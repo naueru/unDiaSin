@@ -3,15 +3,17 @@ import * as Notifications from "expo-notifications";
 
 // Types
 import { TTranslationsKeys } from "../models/translations";
+import { TTimeObject } from "../store/config-context";
 
 // Constants
-import TRANSLATIONS from "../constants/translations";
 import { DEFAULT_LANGUAGE } from "../constants/defaults";
+import TRANSLATIONS from "../constants/translations";
 
 export const scheduleNotification = (
-  language: TTranslationsKeys = DEFAULT_LANGUAGE
+  language: TTranslationsKeys = DEFAULT_LANGUAGE,
+  time: TTimeObject
 ) => {
-  const trigger = new Date().setHours(23, 50, 0, 0);
+  const trigger = new Date().setHours(time.hour, time.minutes, time.seconds, 0);
   Notifications.scheduleNotificationAsync({
     identifier: "daily",
     content: {
