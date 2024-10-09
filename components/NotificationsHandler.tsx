@@ -13,15 +13,15 @@ import {
 
 const NotificationsHaddler = () => {
   const { language } = useContext(TranslationsContext);
-  const { notifications } = useContext(ConfigurationContext);
+  const { notifications, notificationsTime } = useContext(ConfigurationContext);
 
   useEffect(() => {
     if (notifications) {
-      scheduleNotification(language);
+      scheduleNotification(language, notificationsTime);
     } else {
       turnOffNotifications();
     }
-  }, [language, notifications]);
+  }, [language, notifications, notificationsTime]);
   return <></>;
 };
 
