@@ -11,6 +11,7 @@ export interface IColors {
   accent500: THexColor;
   error500: THexColor;
   white: THexColor;
+  black: THexColor;
   primaryText: THexColor;
   secondaryText: THexColor;
   primaryButton: THexColor;

@@ -1,9 +1,10 @@
 // Core
 import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
-import { Appearance, ScrollView, Text, View } from "react-native";
-import { FC, useContext, useRef } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { NativeStackNavigatorProps } from "react-native-screens/lib/typescript/native-stack/types";
+import { Appearance, ScrollView, Text, View } from "react-native";
+import { FC, useContext, useLayoutEffect, useRef } from "react";
 
 // Hooks
 import { useColorTheme } from "../hooks/styles";
@@ -35,7 +36,7 @@ import { STORAGE_KEY_THEME } from "../constants/constants";
 import { ICONS_SORTED } from "../constants/IconsSorted";
 import { GLOBAL_STYLES } from "../constants/styles";
 
-const Config: FC = () => {
+const Config: FC<NativeStackNavigatorProps> = ({ navigation }) => {
   const { translation, chooseLanguage, language } =
     useContext(TranslationsContext);
   const configCtx = useContext(ConfigurationContext);
@@ -54,8 +55,14 @@ const Config: FC = () => {
     containerRef.current?.setNativeProps({ scrollEnabled: true });
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: translation.CONFIG_SCREEN_TITLE,
+    });
+  });
+
   return (
-    <PanNavigator initialAnimationValue={0}>
+    <PanNavigator>
       <View style={styles.container}>
         <ScrollView
           ref={containerRef}

@@ -1,49 +1,64 @@
 // Types
 import { TLanguageSelectData } from "../models/translations";
+import { TIcons } from "../models/Icons";
+import { TROUTE, TROUTE_DESTINATIONS, TROUTES } from "../models/routes";
 
-export const ROUTES = {
-  expendables: "Expendables",
-  manageExpendable: "ManageExpendable",
-  config: "Config",
-  expendablesOverview: "ExpendablesOverview",
-  expendableDetail: "ExpendableDetail",
+export const ROUTES: TROUTES = {
+  expendables: "expendables",
+  manageExpendable: "manageExpendable",
+  config: "config",
+  expendablesOverview: "expendablesOverview",
+  expendableDetail: "expendableDetail",
 };
 
-type TROUTE_DESTINATION = {
-  route: string | null;
-  params: {
-    [key: string]: string | number;
-  };
+export const ROUTES_ICONS: { [key in TROUTE]: TIcons } = {
+  expendables: "skull",
+  manageExpendable: "add-circle",
+  config: "settings",
+  expendablesOverview: "skull",
+  expendableDetail: "skull",
 };
-
-type TROUTE_DESTINATION_PAIR = {
-  left: TROUTE_DESTINATION;
-  right: TROUTE_DESTINATION;
-};
-
-type TROUTE_DESTINATIONS = { [key: string]: TROUTE_DESTINATION_PAIR };
 
 export const ROUTE_DESTINATIONS: TROUTE_DESTINATIONS = {
-  Expendables: {
+  expendables: {
     left: { route: ROUTES.config, params: {} },
     right: { route: ROUTES.manageExpendable, params: {} },
-  },
-  ManageExpendable: {
-    left: {
-      route: ROUTES.expendablesOverview,
+    self: {
+      route: ROUTES.expendables,
       params: {},
     },
+  },
+  manageExpendable: {
+    left: {
+      route: ROUTES.expendablesOverview,
+      params: { screen: ROUTES.expendables },
+    },
     right: { route: null, params: {} },
+    self: {
+      route: ROUTES.manageExpendable,
+      params: {},
+    },
   },
-  Config: {
+  config: {
     left: { route: null, params: {} },
-    right: { route: ROUTES.expendablesOverview, params: {} },
+    right: {
+      route: ROUTES.expendablesOverview,
+      params: { screen: ROUTES.expendables },
+    },
+    self: {
+      route: ROUTES.config,
+      params: {},
+    },
   },
-  ExpendablesOverview: {
+  expendablesOverview: {
     left: { route: ROUTES.config, params: {} },
     right: { route: ROUTES.manageExpendable, params: {} },
+    self: {
+      route: ROUTES.expendablesOverview,
+      params: { screen: ROUTES.expendables },
+    },
   },
-  ExpendableDetail: {
+  expendableDetail: {
     left: {
       route: ROUTES.expendablesOverview,
       params: { screen: ROUTES.expendables },
@@ -52,15 +67,19 @@ export const ROUTE_DESTINATIONS: TROUTE_DESTINATIONS = {
       route: ROUTES.manageExpendable,
       params: {},
     },
+    self: {
+      route: ROUTES.expendableDetail,
+      params: {},
+    },
   },
 };
 
-export const MILLS_PER_SEC = 1000;
-export const SEC_PER_MIN = 60;
-export const MIN_PER_HOUR = 60;
-export const HOURS_PER_DAY = 24;
+export const MILLS_PER_SEC: number = 1000;
+export const SEC_PER_MIN: number = 60;
+export const MIN_PER_HOUR: number = 60;
+export const HOURS_PER_DAY: number = 24;
 
-export const MILLS_PER_DAY =
+export const MILLS_PER_DAY: number =
   MILLS_PER_SEC * SEC_PER_MIN * MIN_PER_HOUR * HOURS_PER_DAY; // 86400000
 
 export const LANGUAGES: TLanguageSelectData[] = [
@@ -69,10 +88,15 @@ export const LANGUAGES: TLanguageSelectData[] = [
   { value: "japanese", label: "日本語" },
 ];
 
-export const DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+export const DAYS_PER_MONTH: number[] = [
+  31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31,
+];
 
 // Storage
-export const STORAGE_KEY_EXPENDABLES = "expendable_";
-export const STORAGE_KEY_NOTIFICATIONS = "notifications";
-export const STORAGE_KEY_LANGUAGE = "language";
-export const STORAGE_KEY_THEME = "theme";
+export const STORAGE_KEY_EXPENDABLES: string = "expendable_";
+export const STORAGE_KEY_NOTIFICATIONS: string = "notifications";
+export const STORAGE_KEY_LANGUAGE: string = "language";
+export const STORAGE_KEY_THEME: string = "theme";
+
+// Pan Navigator
+export const MIN_FINGER_TRAVEL: number = 150;

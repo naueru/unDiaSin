@@ -2,11 +2,12 @@
 import AsyncStorage, {
   useAsyncStorage,
 } from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  createNavigationContainerRef,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { Ionicons } from "@expo/vector-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { FC, useCallback, useContext, useEffect, useState } from "react";
@@ -34,7 +35,7 @@ import Config from "./screens/Config";
 
 // Components
 import NotificationsHaddler from "./components/NotificationsHandler";
-import DummyDataButton from "./components/DummyDataButton";
+import BottomNav from "./components/BottomNav";
 
 // Hooks
 import { useColorTheme } from "./hooks/styles";
@@ -64,7 +65,7 @@ Notifications.setNotificationHandler({
 });
 
 const Stack = createNativeStackNavigator();
-const BottomTabs = createBottomTabNavigator();
+const BottomTabs = createNativeStackNavigator();
 
 const ExpendablesOverview: FC = () => {
   const scheme = useColorTheme();
@@ -86,7 +87,6 @@ const ExpendablesOverview: FC = () => {
             title: translation.ALL_EXPENDABLES_TITLE,
             presentation: "modal",
             animation: "slide_from_bottom",
-            headerRight: () => <DummyDataButton />,
           };
         }}
       />
@@ -182,8 +182,10 @@ const Root = () => {
     return null;
   }
 
+  const navigationRef = createNavigationContainerRef();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <BottomSheetModalProvider>
           <BottomTabs.Navigator
@@ -192,26 +194,15 @@ const Root = () => {
                 backgroundColor: GLOBAL_STYLES.colors[scheme].primary500,
               },
               headerTintColor: GLOBAL_STYLES.colors[scheme].primaryText,
-              tabBarStyle: {
-                backgroundColor: GLOBAL_STYLES.colors[scheme].primary500,
-              },
-              tabBarActiveTintColor: GLOBAL_STYLES.colors[scheme].accent500,
-              tabBarShowLabel: false,
             }}
             initialRouteName={ROUTES.expendablesOverview}
           >
             <BottomTabs.Screen
               name={ROUTES.config}
               component={Config}
-              options={() => {
-                const { translation } = useContext(TranslationsContext);
-                return {
-                  title: translation.CONFIG_SCREEN_TITLE,
-                  tabBarLabel: "",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name={"settings"} size={size} color={color} />
-                  ),
-                };
+              options={{
+                presentation: "modal",
+                animation: "slide_from_left",
               }}
             />
             <BottomTabs.Screen
@@ -219,10 +210,8 @@ const Root = () => {
               component={ExpendablesOverview}
               options={{
                 title: "",
-                tabBarLabel: "",
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons name={"skull"} size={size} color={color} />
-                ),
+                presentation: "modal",
+                animation: "slide_from_bottom",
                 headerShown: false,
               }}
             />
@@ -231,13 +220,12 @@ const Root = () => {
               component={ManageExpendable}
               options={{
                 title: "",
-                tabBarLabel: "",
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons size={size} color={color} name={"add-circle"} />
-                ),
+                presentation: "modal",
+                animation: "slide_from_right",
               }}
             />
           </BottomTabs.Navigator>
+          <BottomNav navRef={navigationRef} />
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
     </NavigationContainer>
