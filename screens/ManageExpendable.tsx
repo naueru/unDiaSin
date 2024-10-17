@@ -94,11 +94,19 @@ const ManageExpendable: FC<NativeStackNavigatorProps> = ({
     } else {
       expendablesCtx.addExpendable(values);
     }
-    navigation.navigate(ROUTES.expendablesOverview);
+    navigation.navigate(ROUTES.expendablesOverview, {
+      screen: ROUTES.expendables,
+    });
   };
 
   const handleCancel = () => {
-    navigation.navigate(ROUTES.expendablesOverview);
+    if (isEditing) {
+      navigation.navigate(ROUTES.expendablesOverview);
+    } else {
+      navigation.navigate(ROUTES.expendablesOverview, {
+        screen: ROUTES.expendables,
+      });
+    }
   };
 
   useEffect(() => {
